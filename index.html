@@ -2,9 +2,12 @@
 <html lang="en" class="">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PostgreSQL DB Knowledge Base</title>
     <meta name="theme-color" content="#0284c7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -43,12 +46,101 @@
             .text-lg {
                 font-size: 1rem !important;
             }
+            
+            /* Mobile-optimized buttons */
+            #back-to-top-btn, #print-page-btn, #chat-toggle-button {
+                width: 40px;
+                height: 40px;
+                padding: 0.5rem;
+                bottom: 1rem;
+            }
+            
+            #back-to-top-btn {
+                right: 60px;
+            }
+            
+            #print-page-btn {
+                right: 110px;
+            }
+            
+            /* Better table handling on small screens */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            /* Code blocks on mobile */
+            pre {
+                max-width: 100%;
+                font-size: 12px;
+            }
+            
+            /* Mobile-friendly chat widget */
+            #chat-widget {
+                max-width: 95%;
+                right: 2.5%;
+                left: 2.5%;
+            }
+            
+            /* Adjust font sizes for readability on small screens */
+            .diagram-container, .visual-content {
+                transform: scale(0.9);
+                transform-origin: left top;
+            }
+            
+            /* Improved spacing on mobile */
+            .p-4 {
+                padding: 0.75rem !important;
+            }
+            
+            .p-6 {
+                padding: 1rem !important;
+            }
+            
+            .p-8 {
+                padding: 1.5rem !important;
+            }
+            
+            .m-4 {
+                margin: 0.75rem !important;
+            }
+            
+            .m-6 {
+                margin: 1rem !important;
+            }
         }
         
         @media (max-width: 768px) {
-            .grid-cols-2 {
+            .grid-cols-2, .grid-cols-3, .grid-cols-4 {
                 grid-template-columns: 1fr !important;
             }
+            
+            /* Adjust sidebar behavior */
+            #sidebar {
+                position: fixed;
+                z-index: 50;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                transition: transform 0.3s ease-in-out;
+            }
+            
+            /* Improved tab navigation */
+            .tab-navigation {
+                flex-wrap: wrap;
+            }
+            
+            .tab-button {
+                font-size: 0.875rem;
+                padding: 0.5rem 0.75rem;
+            }
+            
+            /* Better spacing for mobile content */
+            .space-y-8 {
+                row-gap: 1.5rem !important;
+            }
+        }
             
             .grid-cols-3 {
                 grid-template-columns: repeat(2, 1fr) !important;
@@ -1542,6 +1634,55 @@
         .tag-fix { background-color: #22c55e; }   /* green-500 */
         .tag-tune { background-color: #3b82f6; }   /* blue-500 */
 
+        /* ===== MOBILE RESPONSIVENESS FIXES ===== */
+        @media (max-width: 640px) {
+            /* Better handling of code blocks on mobile */
+            pre {
+                font-size: 12px !important;
+                padding: 0.75rem !important;
+                max-width: 100%;
+                overflow-x: auto;
+            }
+            
+            /* Improve form elements on small screens */
+            input, select, textarea {
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+            
+            /* Adjust copy button positioning */
+            .copy-btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+                right: 0.25rem;
+                top: 0.25rem;
+            }
+            
+            /* Improve mobile touch targets */
+            button, .sidebar-item, .tab-button {
+                min-height: 44px; /* Apple recommended minimum */
+            }
+            
+            /* Adjust spacing on mobile */
+            .m-4, .mx-4, .my-4, .mt-4, .mb-4, .ml-4, .mr-4 {
+                margin: 0.75rem !important;
+            }
+            
+            .p-4, .px-4, .py-4, .pt-4, .pb-4, .pl-4, .pr-4 {
+                padding: 0.75rem !important;
+            }
+            
+            /* Improve readability of table on mobile */
+            table {
+                font-size: 0.875rem;
+            }
+            
+            /* Adjust image sizes */
+            img:not(.h-8) {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+        }
+
         /* ===== PRINT OPTIMIZATION STYLES ===== */
         @media print {
             /* General print settings */
@@ -1843,6 +1984,14 @@
     <!-- Skip Navigation Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
+    <!-- Mobile Menu Toggle Button (only visible on small screens) -->
+    <button id="mobile-menu-toggle" class="fixed top-4 left-4 z-50 p-2 rounded-md bg-primary-600 text-white shadow-lg hidden sm:hidden focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+        <i class="fa-solid fa-bars text-xl"></i>
+    </button>
+    
+    <!-- Mobile Menu Overlay (only visible when menu is open) -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
     <div class="flex h-screen bg-base-50 dark:bg-base-900">
         <!-- Sidebar Navigation -->
         <aside id="sidebar" class="w-72 bg-white dark:bg-base-800 border-r border-base-200 dark:border-base-700 flex flex-col transition-transform -translate-x-full sm:translate-x-0 sm:flex">
@@ -1870,7 +2019,35 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 flex flex-col overflow-hidden">
-            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 flex justify-between items-center shadow-sm">
+            <!-- Mobile Header (only visible on small screens) -->
+            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 sm:hidden flex items-center justify-between sticky top-0 z-30">
+                <div class="flex items-center">
+                    <button id="mobile-menu-toggle-header" class="mr-3 text-base-600 dark:text-base-300">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-lg font-bold text-primary-600 dark:text-primary-400">PostgreSQL KB</h1>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="mobile-search-toggle" class="p-2 text-base-600 dark:text-base-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                    <button id="mobile-theme-toggle" class="p-2 text-base-600 dark:text-base-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:block"></i>
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Mobile Search Bar (hidden by default) -->
+            <div id="mobile-search-container" class="bg-white dark:bg-base-800 p-4 border-b border-base-200 dark:border-base-700 hidden sm:hidden">
+                <div class="relative">
+                    <input type="text" id="mobile-search-input" placeholder="Search knowledge base..." class="w-full p-2 pl-10 border border-base-300 dark:border-base-600 rounded-lg">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-base-400"></i>
+                </div>
+            </div>
+            
+            <!-- Desktop Header (hidden on small screens) -->
+            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 hidden sm:flex justify-between items-center shadow-sm">
                 <div class="flex items-center">
                     <button id="menu-toggle" class="sm:hidden p-2 text-base-600 dark:text-base-300 hover:bg-base-100 dark:hover:bg-base-700 rounded-lg mr-2">
                         <i class="fa-solid fa-bars text-xl"></i>
@@ -1912,22 +2089,22 @@
     </div>
 
     <!-- Back to Top Button -->
-    <button id="back-to-top-btn" class="fixed bottom-6 right-24 bg-primary-600 text-white p-3 rounded-full shadow-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-transform transform hover:scale-110 opacity-0 translate-y-4 tooltip" aria-label="Back to top" data-tooltip="Back to top (Ctrl+Home)">
-      <i class="fa-solid fa-arrow-up text-xl"></i>
+    <button id="back-to-top-btn" class="fixed bottom-4 sm:bottom-6 right-16 sm:right-24 bg-primary-600 text-white p-2 sm:p-3 rounded-full shadow-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-transform transform hover:scale-110 opacity-0 translate-y-4 tooltip z-40" aria-label="Back to top" data-tooltip="Back to top (Ctrl+Home)">
+      <i class="fa-solid fa-arrow-up text-lg sm:text-xl"></i>
     </button>
 
     <!-- Print Page Button -->
-    <button id="print-page-btn" class="fixed bottom-6 right-36 bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-transform transform hover:scale-110 tooltip" aria-label="Print current page" data-tooltip="Print Page (Ctrl+P)" onclick="window.print()">
-      <i class="fa-solid fa-print text-xl"></i>
+    <button id="print-page-btn" class="fixed bottom-4 sm:bottom-6 right-28 sm:right-36 bg-green-600 text-white p-2 sm:p-3 rounded-full shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-transform transform hover:scale-110 tooltip z-40" aria-label="Print current page" data-tooltip="Print Page (Ctrl+P)" onclick="window.print()">
+      <i class="fa-solid fa-print text-lg sm:text-xl"></i>
     </button>
 
     <!-- Chatbot Toggle Button -->
-    <button id="chat-toggle-button" class="fixed bottom-6 right-6 bg-primary-600 text-white p-4 rounded-full shadow-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-transform transform hover:scale-110 tooltip" aria-label="Open chat" data-tooltip="Chat Assistant (Ctrl+?)">
-        <i class="fa-solid fa-comments text-2xl"></i>
+    <button id="chat-toggle-button" class="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 bg-primary-600 text-white p-3 sm:p-4 rounded-full shadow-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-transform transform hover:scale-110 tooltip z-40" aria-label="Open chat" data-tooltip="Chat Assistant (Ctrl+?)">
+        <i class="fa-solid fa-comments text-xl sm:text-2xl"></i>
     </button>
 
     <!-- Enhanced Chatbot Widget -->
-    <div id="chat-widget" class="fixed bottom-24 right-6 w-full max-w-md h-auto max-h-[80vh] bg-white dark:bg-base-800 rounded-xl shadow-2xl flex flex-col transform translate-y-8 opacity-0 hidden border border-base-200 dark:border-base-700">
+    <div id="chat-widget" class="fixed bottom-16 sm:bottom-24 right-2 sm:right-6 w-[95%] sm:w-full max-w-md h-auto max-h-[70vh] sm:max-h-[80vh] bg-white dark:bg-base-800 rounded-xl shadow-2xl flex flex-col transform translate-y-8 opacity-0 hidden border border-base-200 dark:border-base-700 z-50">
         <header class="flex items-center justify-between p-4 border-b border-base-200 dark:border-base-700 bg-gradient-to-r from-primary-600 to-blue-600 text-white rounded-t-xl">
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
@@ -3293,6 +3470,132 @@ Benefits:
                                         "Verify client IP: `SELECT inet_client_addr(), inet_client_port();`",
                                         "Test from specific host: `psql -h server_ip -U username -d dbname`"
                                     ]
+                                },
+                                {
+                                    message: "FATAL: password authentication failed for user \"username\"",
+                                    errorCode: "28P01",
+                                    severity: "Medium",
+                                    cause: "The password provided for the user is incorrect or the user doesn't exist.",
+                                    resolution: "Verify the username and password are correct. Reset the password if necessary using ALTER ROLE.",
+                                    parameters: "N/A",
+                                    tip: "Check for typos in username and ensure the user exists in the database.",
+                                    troubleshooting: [
+                                        "Check if user exists: `SELECT rolname FROM pg_roles WHERE rolname = 'username';`",
+                                        "Reset password: `ALTER ROLE username WITH PASSWORD 'new_password';`",
+                                        "Test connection: `psql -h host -U username -d dbname`"
+                                    ]
+                                },
+                                {
+                                    message: "FATAL: role \"username\" does not exist",
+                                    errorCode: "28000",
+                                    severity: "Medium",
+                                    cause: "The specified user role does not exist in the PostgreSQL cluster.",
+                                    resolution: "Create the user role or verify the correct username is being used.",
+                                    parameters: "N/A",
+                                    tip: "List all roles with \\du in psql to see available users.",
+                                    troubleshooting: [
+                                        "List all roles: `SELECT rolname FROM pg_roles;`",
+                                        "Create role: `CREATE ROLE username WITH LOGIN PASSWORD 'password';`",
+                                        "Check role attributes: `\\du username`"
+                                    ]
+                                },
+                                {
+                                    message: "FATAL: role \"username\" is not permitted to log in",
+                                    errorCode: "28000",
+                                    severity: "Medium",
+                                    cause: "The role exists but does not have the LOGIN privilege.",
+                                    resolution: "Grant LOGIN privilege to the role using ALTER ROLE username WITH LOGIN.",
+                                    parameters: "N/A",
+                                    tip: "Roles created without LOGIN are group roles and cannot connect directly.",
+                                    troubleshooting: [
+                                        "Check login privilege: `SELECT rolname, rolcanlogin FROM pg_roles WHERE rolname = 'username';`",
+                                        "Grant login: `ALTER ROLE username WITH LOGIN;`",
+                                        "Verify change: `SELECT rolcanlogin FROM pg_roles WHERE rolname = 'username';`"
+                                    ]
+                                },
+                                {
+                                    message: "FATAL: connection limit exceeded for non-superusers",
+                                    errorCode: "53300",
+                                    severity: "High",
+                                    cause: "All connection slots are occupied and the connecting user is not a superuser.",
+                                    resolution: "Terminate idle connections or increase max_connections. Reserve connections for superusers.",
+                                    parameters: "max_connections, superuser_reserved_connections",
+                                    tip: "Always reserve some connections for superusers to perform maintenance.",
+                                    troubleshooting: [
+                                        "Check connections: `SELECT count(*), usename FROM pg_stat_activity GROUP BY usename;`",
+                                        "Find idle connections: `SELECT pid, usename, state FROM pg_stat_activity WHERE state = 'idle';`",
+                                        "Terminate idle: `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle';`"
+                                    ]
+                                },
+                                {
+                                    message: "FATAL: unsupported frontend protocol",
+                                    errorCode: "0A000",
+                                    severity: "Medium",
+                                    cause: "The client is using an incompatible protocol version with the PostgreSQL server.",
+                                    resolution: "Update the client library or PostgreSQL server to compatible versions.",
+                                    parameters: "N/A",
+                                    tip: "Check PostgreSQL and client library versions for compatibility.",
+                                    troubleshooting: [
+                                        "Check server version: `SELECT version();`",
+                                        "Check client version: Use appropriate client command",
+                                        "Update client libraries to match server version"
+                                    ]
+                                },
+                                {
+                                    message: "FATAL: terminating connection due to administrator command",
+                                    errorCode: "57P01",
+                                    severity: "Medium",
+                                    cause: "An administrator manually terminated the connection using pg_terminate_backend().",
+                                    resolution: "This is typically intentional. Check with database administrators about the termination reason.",
+                                    parameters: "N/A",
+                                    tip: "Check PostgreSQL logs for context about why the connection was terminated.",
+                                    troubleshooting: [
+                                        "Check logs for termination reason",
+                                        "Contact database administrator",
+                                        "Review current connections: `SELECT * FROM pg_stat_activity;`"
+                                    ]
+                                },
+                                {
+                                    message: "FATAL: the database system is starting up",
+                                    errorCode: "57P03",
+                                    severity: "High",
+                                    cause: "PostgreSQL server is in the process of starting up and not yet ready to accept connections.",
+                                    resolution: "Wait for the server to complete startup process before attempting connections.",
+                                    parameters: "N/A",
+                                    tip: "Use pg_isready to check when the server is ready to accept connections.",
+                                    troubleshooting: [
+                                        "Check server status: `pg_isready -h host -p port`",
+                                        "Monitor startup: Check PostgreSQL logs",
+                                        "Wait and retry connection"
+                                    ]
+                                },
+                                {
+                                    message: "FATAL: the database system is shutting down",
+                                    errorCode: "57P03",
+                                    severity: "High",
+                                    cause: "PostgreSQL server is in the process of shutting down and no longer accepting new connections.",
+                                    resolution: "Wait for shutdown to complete and restart the server if needed.",
+                                    parameters: "N/A",
+                                    tip: "Check if shutdown was planned or if there's an issue requiring investigation.",
+                                    troubleshooting: [
+                                        "Check server process: `ps aux | grep postgres`",
+                                        "Review shutdown logs",
+                                        "Restart server if needed: `pg_ctl start`"
+                                    ]
+                                },
+                                {
+                                    message: "FATAL: could not open file \"pg_hba.conf\"",
+                                    errorCode: "XX000",
+                                    severity: "Critical",
+                                    cause: "PostgreSQL cannot read the pg_hba.conf file due to missing file or permission issues.",
+                                    resolution: "Check file existence and permissions. Ensure PostgreSQL user can read the file.",
+                                    parameters: "hba_file",
+                                    tip: "pg_hba.conf should be readable by the postgres user and located in the data directory.",
+                                    troubleshooting: [
+                                        "Check file exists: `ls -la $PGDATA/pg_hba.conf`",
+                                        "Check permissions: `ls -la $PGDATA/pg_hba.conf`",
+                                        "Fix permissions: `chown postgres:postgres $PGDATA/pg_hba.conf`"
+                                    ]
                                 }
                             ]
                         },
@@ -3342,6 +3645,132 @@ Benefits:
                                         "Monitor connections: `SELECT count(*) FROM pg_stat_activity;`",
                                         "Check system memory: Review system logs for OOM killer activity"
                                     ]
+                                },
+                                {
+                                    message: "ERROR: could not write to file: No space left on device",
+                                    errorCode: "53100",
+                                    severity: "Critical",
+                                    cause: "Disk space exhausted while trying to write data, often during large operations or log file growth.",
+                                    resolution: "Free up disk space immediately. Check temp directories, logs, and consider moving files to other partitions.",
+                                    parameters: "N/A",
+                                    tip: "Monitor disk space regularly and set up alerts before reaching capacity.",
+                                    troubleshooting: [
+                                        "Check disk space: `df -h`",
+                                        "Find large files: `find /var/lib/postgresql -type f -size +100M`",
+                                        "Clean temp files: Check and clean temporary directories"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: temporary file size exceeds temp_file_limit",
+                                    errorCode: "53400",
+                                    severity: "Medium",
+                                    cause: "A query exceeded the allowed temporary file size limit defined by temp_file_limit parameter.",
+                                    resolution: "Increase temp_file_limit, optimize the query to use less memory, or increase work_mem.",
+                                    parameters: "temp_file_limit, work_mem",
+                                    tip: "Large temporary files often indicate queries that need optimization or more memory.",
+                                    troubleshooting: [
+                                        "Check limit: `SHOW temp_file_limit;`",
+                                        "Monitor temp files: `SELECT * FROM pg_stat_database;`",
+                                        "Optimize query: Use EXPLAIN to analyze query plan"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not resize shared memory segment: Cannot allocate memory",
+                                    errorCode: "53200",
+                                    severity: "High",
+                                    cause: "System cannot allocate additional shared memory when PostgreSQL tries to expand shared memory segments.",
+                                    resolution: "Increase system shared memory limits or reduce PostgreSQL memory usage.",
+                                    parameters: "shared_buffers, max_connections",
+                                    tip: "This often occurs on systems with limited RAM or restrictive kernel settings.",
+                                    troubleshooting: [
+                                        "Check system memory: `free -h`",
+                                        "Check kernel limits: `cat /proc/sys/kernel/shmmax`",
+                                        "Adjust PostgreSQL memory: Reduce shared_buffers or max_connections"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not open temporary statistics file: Too many open files",
+                                    errorCode: "53000",
+                                    severity: "Medium",
+                                    cause: "PostgreSQL has reached the system limit for open file descriptors.",
+                                    resolution: "Increase the file descriptor limit for the PostgreSQL process or system-wide.",
+                                    parameters: "N/A",
+                                    tip: "This often occurs with many concurrent connections or partitioned tables.",
+                                    troubleshooting: [
+                                        "Check current limit: `ulimit -n`",
+                                        "Check PostgreSQL usage: `lsof -p postgres_pid | wc -l`",
+                                        "Increase limit: Edit /etc/security/limits.conf"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: insufficient disk space for WAL files",
+                                    errorCode: "53100",
+                                    severity: "Critical",
+                                    cause: "Not enough disk space to create new WAL (Write-Ahead Log) files.",
+                                    resolution: "Free up disk space immediately, especially in the pg_wal directory. Consider WAL archiving.",
+                                    parameters: "wal_segment_size, max_wal_size",
+                                    tip: "WAL files are critical for data consistency - never delete them manually.",
+                                    troubleshooting: [
+                                        "Check WAL directory: `du -sh $PGDATA/pg_wal`",
+                                        "Monitor WAL usage: `SELECT * FROM pg_stat_archiver;`",
+                                        "Configure archiving: Set up WAL archiving to remove old files"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not create lock file: No space left on device",
+                                    errorCode: "53100",
+                                    severity: "Critical",
+                                    cause: "Cannot create lock files due to disk space exhaustion.",
+                                    resolution: "Free up disk space immediately. Check /tmp and PostgreSQL data directory.",
+                                    parameters: "N/A",
+                                    tip: "Lock files are essential for preventing multiple PostgreSQL instances.",
+                                    troubleshooting: [
+                                        "Check /tmp space: `df -h /tmp`",
+                                        "Check data directory: `df -h $PGDATA`",
+                                        "Clean temporary files: `find /tmp -name '.s.PGSQL.*' -delete`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: out of memory for query result",
+                                    errorCode: "53200",
+                                    severity: "High",
+                                    cause: "Query result set is too large to fit in available memory.",
+                                    resolution: "Use LIMIT/OFFSET for pagination, increase memory, or process results in smaller chunks.",
+                                    parameters: "work_mem, temp_buffers",
+                                    tip: "Consider using cursors for very large result sets.",
+                                    troubleshooting: [
+                                        "Add LIMIT: `SELECT * FROM large_table LIMIT 1000;`",
+                                        "Use cursors: `DECLARE cursor_name CURSOR FOR SELECT ...`",
+                                        "Check memory: Monitor system memory usage"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not write to tuplestore temporary file: No space left on device",
+                                    errorCode: "53100",
+                                    severity: "High",
+                                    cause: "Temporary file for storing intermediate query results cannot be written due to disk space.",
+                                    resolution: "Free up disk space, especially in the temporary directory used by PostgreSQL.",
+                                    parameters: "temp_tablespaces",
+                                    tip: "Consider setting temp_tablespaces to use a different disk with more space.",
+                                    troubleshooting: [
+                                        "Check temp space: `SHOW temp_tablespaces;`",
+                                        "Monitor temp files: `SELECT * FROM pg_stat_database WHERE datname = current_database();`",
+                                        "Set temp tablespace: `SET temp_tablespaces = 'temp_tablespace';`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not fork new process: Cannot allocate memory",
+                                    errorCode: "53200",
+                                    severity: "Critical",
+                                    cause: "System cannot create new processes due to memory exhaustion.",
+                                    resolution: "Add more system memory, reduce PostgreSQL memory usage, or kill unnecessary processes.",
+                                    parameters: "max_connections, shared_buffers",
+                                    tip: "This indicates severe system memory pressure requiring immediate attention.",
+                                    troubleshooting: [
+                                        "Check system memory: `free -h`",
+                                        "Check PostgreSQL processes: `ps aux | grep postgres`",
+                                        "Reduce connections: Lower max_connections temporarily"
+                                    ]
                                 }
                             ]
                         },
@@ -3376,6 +3805,132 @@ Benefits:
                                         "Check timeout settings: `SHOW lock_timeout; SHOW statement_timeout;`",
                                         "Find blocking queries: `SELECT * FROM pg_blocking_pids(pid);`",
                                         "Monitor lock waits: `SELECT locktype, mode, granted FROM pg_locks WHERE pid = blocked_pid;`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: tuple to be locked was already moved to another partition",
+                                    errorCode: "55000",
+                                    severity: "Medium",
+                                    cause: "Concurrent UPDATE moved a row to a different partition while another transaction was trying to lock it.",
+                                    resolution: "Retry the operation. Consider using appropriate isolation levels or row-level locking strategies.",
+                                    parameters: "default_transaction_isolation",
+                                    tip: "This can occur with partitioned tables when partition keys are updated.",
+                                    troubleshooting: [
+                                        "Check isolation level: `SHOW transaction_isolation;`",
+                                        "Use explicit locking: `SELECT ... FOR UPDATE;`",
+                                        "Retry transaction with proper error handling"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not serialize access due to concurrent update",
+                                    errorCode: "40001",
+                                    severity: "Medium",
+                                    cause: "Serialization failure due to concurrent modifications in SERIALIZABLE isolation level.",
+                                    resolution: "Retry the transaction with exponential backoff. Consider using lower isolation level if appropriate.",
+                                    parameters: "default_transaction_isolation",
+                                    tip: "Implement retry logic with exponential backoff for handling serialization failures.",
+                                    troubleshooting: [
+                                        "Check conflicts: `SELECT * FROM pg_stat_database_conflicts;`",
+                                        "Monitor serialization failures: Track error frequency",
+                                        "Consider READ COMMITTED: Use lower isolation if acceptable"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not obtain lock on row in relation \"table_name\"",
+                                    errorCode: "55P03",
+                                    severity: "Medium",
+                                    cause: "Cannot acquire a row-level lock because another transaction holds a conflicting lock.",
+                                    resolution: "Wait for the conflicting transaction to complete or increase lock_timeout.",
+                                    parameters: "lock_timeout",
+                                    tip: "Use SELECT ... FOR UPDATE NOWAIT to avoid waiting for locks.",
+                                    troubleshooting: [
+                                        "Find blocking process: `SELECT * FROM pg_blocking_pids(current_backend_pid);`",
+                                        "Check lock modes: `SELECT mode, granted FROM pg_locks WHERE relation = 'table_name'::regclass;`",
+                                        "Use NOWAIT: `SELECT ... FOR UPDATE NOWAIT;`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: tuple to be updated was already modified by an operation",
+                                    errorCode: "40001",
+                                    severity: "Medium",
+                                    cause: "Row was modified by another transaction between the time it was read and when update was attempted.",
+                                    resolution: "Retry the operation or handle the concurrent modification in application logic.",
+                                    parameters: "N/A",
+                                    tip: "This is normal in multi-user environments and should be handled gracefully.",
+                                    troubleshooting: [
+                                        "Implement retry logic in application",
+                                        "Use optimistic locking patterns",
+                                        "Check for concurrent processes modifying the same data"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not serialize access due to read/write dependencies",
+                                    errorCode: "40001",
+                                    severity: "Medium",
+                                    cause: "SERIALIZABLE transaction detected read/write dependencies that would violate serializability.",
+                                    resolution: "Retry the transaction or consider using a lower isolation level.",
+                                    parameters: "default_transaction_isolation",
+                                    tip: "SERIALIZABLE isolation provides the strongest consistency but may require more retries.",
+                                    troubleshooting: [
+                                        "Monitor serializable conflicts: `SELECT * FROM pg_stat_database_conflicts;`",
+                                        "Implement retry with backoff",
+                                        "Consider REPEATABLE READ for less strict requirements"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: relation \"table_name\" does not exist",
+                                    errorCode: "42P01",
+                                    severity: "Medium",
+                                    cause: "Another transaction dropped the table while this transaction was trying to access it.",
+                                    resolution: "Handle the case where tables might be dropped concurrently or coordinate DDL operations.",
+                                    parameters: "N/A",
+                                    tip: "Use IF EXISTS clauses and proper error handling for DDL operations.",
+                                    troubleshooting: [
+                                        "Check if table exists: `SELECT * FROM pg_tables WHERE tablename = 'table_name';`",
+                                        "Use IF EXISTS: `DROP TABLE IF EXISTS table_name;`",
+                                        "Coordinate DDL operations to avoid conflicts"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: canceling statement due to statement timeout",
+                                    errorCode: "57014",
+                                    severity: "Medium",
+                                    cause: "Statement exceeded the time limit defined by statement_timeout parameter.",
+                                    resolution: "Optimize the query, increase statement_timeout, or break the operation into smaller chunks.",
+                                    parameters: "statement_timeout",
+                                    tip: "Long-running statements can hold locks and impact concurrency.",
+                                    troubleshooting: [
+                                        "Check timeout: `SHOW statement_timeout;`",
+                                        "Optimize query: Use EXPLAIN to analyze performance",
+                                        "Increase timeout: `SET statement_timeout = '10min';`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: lock timeout exceeded",
+                                    errorCode: "55P03",
+                                    severity: "Medium",
+                                    cause: "Could not acquire a lock within the time specified by lock_timeout.",
+                                    resolution: "Increase lock_timeout, optimize transactions to reduce lock duration, or retry later.",
+                                    parameters: "lock_timeout",
+                                    tip: "Identify and optimize transactions that hold locks for extended periods.",
+                                    troubleshooting: [
+                                        "Check lock timeout: `SHOW lock_timeout;`",
+                                        "Find long transactions: `SELECT * FROM pg_stat_activity WHERE state = 'active' ORDER BY query_start;`",
+                                        "Monitor lock waits: Enable log_lock_waits"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: shared lock queue is full",
+                                    errorCode: "55P03",
+                                    severity: "High",
+                                    cause: "Too many processes are waiting for locks, exceeding the system's lock queue capacity.",
+                                    resolution: "Optimize transactions to reduce lock contention and duration. Consider connection pooling.",
+                                    parameters: "max_locks_per_transaction, max_connections",
+                                    tip: "This indicates high lock contention and may require application design changes.",
+                                    troubleshooting: [
+                                        "Check lock settings: `SHOW max_locks_per_transaction;`",
+                                        "Monitor active locks: `SELECT count(*) FROM pg_locks;`",
+                                        "Analyze lock contention patterns"
                                     ]
                                 }
                             ]
@@ -3426,6 +3981,174 @@ Benefits:
                                         "Check search path: `SHOW search_path;`",
                                         "Verify function arguments match the call"
                                     ]
+                                },
+                                {
+                                    message: "ERROR: relation \"table_name\" does not exist",
+                                    errorCode: "42P01",
+                                    severity: "Medium",
+                                    cause: "The specified table or view name does not exist in the current schema or database.",
+                                    resolution: "Verify the table name is correct, check the schema, or create the table if needed.",
+                                    parameters: "search_path",
+                                    tip: "Use schema-qualified names (schema.table) to avoid search path issues.",
+                                    troubleshooting: [
+                                        "List tables: `SELECT tablename FROM pg_tables WHERE schemaname = 'public';`",
+                                        "Check all schemas: `SELECT schemaname, tablename FROM pg_tables WHERE tablename = 'table_name';`",
+                                        "Verify search path: `SHOW search_path;`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: operator does not exist",
+                                    errorCode: "42883",
+                                    severity: "Medium",
+                                    cause: "PostgreSQL cannot find an operator for the given data types in the operation.",
+                                    resolution: "Check data types and cast them appropriately, or use a different operator.",
+                                    parameters: "N/A",
+                                    tip: "Use explicit casting (::datatype) to ensure compatible data types.",
+                                    troubleshooting: [
+                                        "Check data types: `SELECT pg_typeof(column) FROM table;`",
+                                        "Cast explicitly: `SELECT column::text = 'value';`",
+                                        "List operators: `SELECT * FROM pg_operator WHERE oprname = 'operator';`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: invalid input syntax for integer",
+                                    errorCode: "22P02",
+                                    severity: "Low",
+                                    cause: "Attempting to convert a non-numeric string to an integer data type.",
+                                    resolution: "Validate input data or use appropriate casting functions like TRY_CAST or handle the conversion error.",
+                                    parameters: "N/A",
+                                    tip: "Use regular expressions to validate numeric strings before conversion.",
+                                    troubleshooting: [
+                                        "Validate input: `SELECT value WHERE value ~ '^[0-9]+$';`",
+                                        "Use safe conversion: `SELECT CASE WHEN value ~ '^[0-9]+$' THEN value::integer END;`",
+                                        "Filter invalid data: Clean data before conversion"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: division by zero",
+                                    errorCode: "22012",
+                                    severity: "Medium",
+                                    cause: "Mathematical operation attempted to divide by zero.",
+                                    resolution: "Add a condition to check for zero before division or use NULLIF to handle zero values.",
+                                    parameters: "N/A",
+                                    tip: "Use NULLIF(divisor, 0) to convert zero divisors to NULL.",
+                                    troubleshooting: [
+                                        "Add zero check: `SELECT CASE WHEN divisor != 0 THEN dividend/divisor END;`",
+                                        "Use NULLIF: `SELECT dividend / NULLIF(divisor, 0);`",
+                                        "Validate data: Check for zero values in divisor columns"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: subquery must return only one column",
+                                    errorCode: "42601",
+                                    severity: "Low",
+                                    cause: "A subquery used in a context where only one column is expected returns multiple columns.",
+                                    resolution: "Modify the subquery to return only one column or restructure the query.",
+                                    parameters: "N/A",
+                                    tip: "Use appropriate JOIN instead of subqueries when you need multiple columns.",
+                                    troubleshooting: [
+                                        "Check subquery: Ensure it returns only one column",
+                                        "Use specific column: `SELECT (SELECT specific_column FROM ...);`",
+                                        "Consider JOIN: Replace subquery with appropriate JOIN"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: more than one row returned by a subquery",
+                                    errorCode: "21000",
+                                    severity: "Medium",
+                                    cause: "A subquery that should return at most one row returns multiple rows.",
+                                    resolution: "Add appropriate WHERE conditions to limit the subquery to one row, or use IN/ANY instead of equals.",
+                                    parameters: "N/A",
+                                    tip: "Use LIMIT 1 in subqueries that should return one row, or use aggregate functions.",
+                                    troubleshooting: [
+                                        "Add LIMIT: `SELECT * FROM table WHERE id = (SELECT id FROM other_table LIMIT 1);`",
+                                        "Use IN operator: `SELECT * FROM table WHERE id IN (SELECT id FROM other_table);`",
+                                        "Add unique constraints: Ensure subquery conditions are unique"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: aggregate functions are not allowed in WHERE",
+                                    errorCode: "42803",
+                                    severity: "Low",
+                                    cause: "Attempting to use aggregate functions like COUNT, SUM in WHERE clause instead of HAVING.",
+                                    resolution: "Move aggregate functions to HAVING clause or use subqueries.",
+                                    parameters: "N/A",
+                                    tip: "Use HAVING for conditions on aggregate functions, WHERE for individual row conditions.",
+                                    troubleshooting: [
+                                        "Use HAVING: `SELECT * FROM table GROUP BY column HAVING COUNT(*) > 1;`",
+                                        "Use subquery: `SELECT * FROM (SELECT *, COUNT(*) OVER() as cnt FROM table) WHERE cnt > 1;`",
+                                        "Review query structure: Separate row and group conditions"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: column must appear in the GROUP BY clause",
+                                    errorCode: "42803",
+                                    severity: "Low",
+                                    cause: "Non-aggregate columns in SELECT must be included in GROUP BY clause when using GROUP BY.",
+                                    resolution: "Add the column to GROUP BY clause or use an aggregate function on it.",
+                                    parameters: "N/A",
+                                    tip: "All non-aggregate SELECT columns must be in GROUP BY unless using window functions.",
+                                    troubleshooting: [
+                                        "Add to GROUP BY: `SELECT col1, COUNT(*) FROM table GROUP BY col1;`",
+                                        "Use aggregate: `SELECT MAX(col1), COUNT(*) FROM table GROUP BY col2;`",
+                                        "Use window functions: `SELECT col1, COUNT(*) OVER(PARTITION BY col2) FROM table;`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: invalid reference to FROM-clause entry",
+                                    errorCode: "42P01",
+                                    severity: "Medium",
+                                    cause: "Referencing a table alias or column that is not available in the current query scope.",
+                                    resolution: "Check table aliases and ensure proper scoping of column references.",
+                                    parameters: "N/A",
+                                    tip: "Use correlation names consistently and check subquery scoping rules.",
+                                    troubleshooting: [
+                                        "Check aliases: Ensure table aliases are defined and used correctly",
+                                        "Verify scope: Check if columns are accessible in the current query level",
+                                        "Use qualified names: Use table.column format for clarity"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: argument of WHERE must be type boolean",
+                                    errorCode: "42804",
+                                    severity: "Low",
+                                    cause: "WHERE clause condition does not evaluate to a boolean value.",
+                                    resolution: "Modify the WHERE condition to return a boolean result using comparison operators.",
+                                    parameters: "N/A",
+                                    tip: "WHERE clause needs comparison operators like =, >, <, IS NULL, etc.",
+                                    troubleshooting: [
+                                        "Add comparison: `WHERE column = value` instead of `WHERE column`",
+                                        "Check for NULL: `WHERE column IS NOT NULL`",
+                                        "Use boolean operators: =, !=, >, <, IN, EXISTS, etc."
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: window function call requires an OVER clause",
+                                    errorCode: "42809",
+                                    severity: "Low",
+                                    cause: "Using a window function without the required OVER clause.",
+                                    resolution: "Add an OVER clause to define the window specification for the function.",
+                                    parameters: "N/A",
+                                    tip: "Window functions like ROW_NUMBER, RANK always need OVER() clause.",
+                                    troubleshooting: [
+                                        "Add OVER: `SELECT ROW_NUMBER() OVER(ORDER BY column) FROM table;`",
+                                        "Use partition: `SELECT SUM(amount) OVER(PARTITION BY category) FROM table;`",
+                                        "Check function type: Verify if function is a window function"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: invalid ORDER BY in aggregate function",
+                                    errorCode: "42P20",
+                                    severity: "Low",
+                                    cause: "Using ORDER BY within an aggregate function that doesn't support it.",
+                                    resolution: "Remove ORDER BY from the aggregate function or use a different aggregate function that supports ordering.",
+                                    parameters: "N/A",
+                                    tip: "Only certain aggregates like STRING_AGG support ORDER BY within the function.",
+                                    troubleshooting: [
+                                        "Check aggregate support: Verify if the aggregate function supports ORDER BY",
+                                        "Use STRING_AGG: `SELECT STRING_AGG(column, ',' ORDER BY column);`",
+                                        "Order outside: `SELECT SUM(column) FROM (SELECT * FROM table ORDER BY column) t;`"
+                                    ]
                                 }
                             ]
                         },
@@ -3461,6 +4184,160 @@ Benefits:
                                         "Test archive command manually",
                                         "Verify archive destination permissions and space"
                                     ]
+                                },
+                                {
+                                    message: "pg_dump: error: query failed: server closed the connection",
+                                    errorCode: "N/A",
+                                    severity: "High",
+                                    cause: "Connection lost during pg_dump operation, possibly due to network issues or server problems.",
+                                    resolution: "Check network stability, server logs, and consider using connection keep-alive options.",
+                                    parameters: "N/A",
+                                    tip: "Use --verbose flag to see where the dump failed and resume from that point.",
+                                    troubleshooting: [
+                                        "Check server logs for errors during dump time",
+                                        "Test network stability: `ping -c 100 server_host`",
+                                        "Use keep-alive: Add TCP keepalive settings"
+                                    ]
+                                },
+                                {
+                                    message: "pg_restore: error: could not read from input file",
+                                    errorCode: "N/A",
+                                    severity: "Medium",
+                                    cause: "pg_restore cannot read the backup file due to corruption, permissions, or incomplete backup.",
+                                    resolution: "Verify backup file integrity, check file permissions, and ensure the backup completed successfully.",
+                                    parameters: "N/A",
+                                    tip: "Always verify backup integrity immediately after creation.",
+                                    troubleshooting: [
+                                        "Check file integrity: `pg_restore --list backup_file`",
+                                        "Verify permissions: `ls -la backup_file`",
+                                        "Test file readability: `file backup_file`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: base backup could not be completed",
+                                    errorCode: "XX000",
+                                    severity: "High",
+                                    cause: "pg_basebackup failed due to insufficient permissions, disk space, or WAL archiving issues.",
+                                    resolution: "Check replication user permissions, disk space, and ensure WAL archiving is properly configured.",
+                                    parameters: "max_wal_senders, wal_level",
+                                    tip: "Ensure the user has REPLICATION privilege and pg_hba.conf allows replication connections.",
+                                    troubleshooting: [
+                                        "Check replication role: `SELECT rolreplication FROM pg_roles WHERE rolname = 'backup_user';`",
+                                        "Verify WAL level: `SHOW wal_level;`",
+                                        "Check pg_hba.conf for replication entries"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not receive data from WAL stream",
+                                    errorCode: "XX000",
+                                    severity: "High",
+                                    cause: "Streaming backup interrupted due to network issues or WAL segment removal.",
+                                    resolution: "Check network connectivity, increase wal_keep_segments, or use replication slots.",
+                                    parameters: "wal_keep_segments, max_replication_slots",
+                                    tip: "Use replication slots to prevent WAL segments from being removed during backup.",
+                                    troubleshooting: [
+                                        "Check WAL retention: `SHOW wal_keep_segments;`",
+                                        "Create replication slot: `SELECT pg_create_physical_replication_slot('backup_slot');`",
+                                        "Monitor WAL segments: `SELECT * FROM pg_stat_replication;`"
+                                    ]
+                                },
+                                {
+                                    message: "pg_dump: error: Dumping the contents of table failed",
+                                    errorCode: "N/A",
+                                    severity: "Medium",
+                                    cause: "Error occurred while dumping specific table data, possibly due to data corruption or constraints.",
+                                    resolution: "Check the specific table for corruption, verify data integrity, and consider dumping schema and data separately.",
+                                    parameters: "N/A",
+                                    tip: "Use --schema-only and --data-only options to isolate the problem.",
+                                    troubleshooting: [
+                                        "Check table integrity: `SELECT * FROM problematic_table LIMIT 1;`",
+                                        "Dump schema only: `pg_dump --schema-only -t table_name`",
+                                        "Check for constraint violations or data issues"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: recovery is still in progress, cannot accept connections",
+                                    errorCode: "57P03",
+                                    severity: "High",
+                                    cause: "Attempting to connect to a standby server that is still in recovery mode.",
+                                    resolution: "Wait for recovery to complete or connect to the primary server instead.",
+                                    parameters: "hot_standby",
+                                    tip: "Enable hot_standby to allow read-only connections during recovery.",
+                                    troubleshooting: [
+                                        "Check recovery status: `SELECT pg_is_in_recovery();`",
+                                        "Enable hot standby: Set hot_standby = on in postgresql.conf",
+                                        "Monitor recovery progress: Check PostgreSQL logs"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: requested WAL segment has already been removed",
+                                    errorCode: "XX000",
+                                    severity: "High",
+                                    cause: "Required WAL segment for recovery has been recycled or archived.",
+                                    resolution: "Restore WAL segment from archive or restart recovery from a more recent backup.",
+                                    parameters: "wal_keep_segments, archive_command",
+                                    tip: "Increase wal_keep_segments or use replication slots to prevent premature WAL removal.",
+                                    troubleshooting: [
+                                        "Check WAL archiving: `SELECT * FROM pg_stat_archiver;`",
+                                        "Restore from archive: Check archive_command configuration",
+                                        "Use newer backup: Start recovery from more recent base backup"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: backup label file missing or corrupt",
+                                    errorCode: "XX000",
+                                    severity: "Critical",
+                                    cause: "The backup_label file is missing or corrupted, preventing proper recovery.",
+                                    resolution: "Do not manually remove backup_label file. Restore from a different backup or recreate if absolutely necessary.",
+                                    parameters: "N/A",
+                                    tip: "Never manually delete backup_label file - it's critical for recovery.",
+                                    troubleshooting: [
+                                        "Check for backup_label: `ls -la $PGDATA/backup_label`",
+                                        "Verify backup procedure: Ensure pg_start_backup() and pg_stop_backup() were used correctly",
+                                        "Use alternative backup if available"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: timeline ID mismatch",
+                                    errorCode: "XX000",
+                                    severity: "High",
+                                    cause: "WAL timeline doesn't match the backup, indicating potential backup/recovery inconsistency.",
+                                    resolution: "Verify backup and WAL files are from the same timeline or use recovery.conf with appropriate timeline setting.",
+                                    parameters: "recovery_target_timeline",
+                                    tip: "Timeline mismatches usually indicate mixing backups and WAL files from different recovery cycles.",
+                                    troubleshooting: [
+                                        "Check timeline: Look at pg_control and WAL file names",
+                                        "Set recovery target: `recovery_target_timeline = 'latest'`",
+                                        "Verify backup consistency: Ensure backup and WAL files match"
+                                    ]
+                                },
+                                {
+                                    message: "pg_dump: error: too many command-line arguments",
+                                    errorCode: "N/A",
+                                    severity: "Low",
+                                    cause: "Invalid command-line syntax for pg_dump command.",
+                                    resolution: "Check pg_dump command syntax and ensure proper quoting of arguments.",
+                                    parameters: "N/A",
+                                    tip: "Use quotes around database names and table names that contain special characters.",
+                                    troubleshooting: [
+                                        "Check command syntax: `pg_dump --help`",
+                                        "Quote special names: `pg_dump \"database name\"`",
+                                        "Verify argument order and format"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not open recovery command file",
+                                    errorCode: "XX000",
+                                    severity: "High",
+                                    cause: "Cannot read recovery.conf or recovery.signal file during recovery process.",
+                                    resolution: "Check file permissions and ensure recovery configuration files exist and are readable.",
+                                    parameters: "N/A",
+                                    tip: "In PostgreSQL 12+, use recovery.signal file and postgresql.conf for recovery parameters.",
+                                    troubleshooting: [
+                                        "Check file permissions: `ls -la $PGDATA/recovery.*`",
+                                        "For PG 12+: Create recovery.signal and set parameters in postgresql.conf",
+                                        "Verify file syntax and parameter names"
+                                    ]
                                 }
                             ]
                         },
@@ -3495,6 +4372,342 @@ Benefits:
                                         "Find duplicates: `SELECT column_name, COUNT(*) FROM table_name GROUP BY column_name HAVING COUNT(*) > 1;`",
                                         "Remove duplicates using window functions or manual cleanup",
                                         "Consider partial unique indexes if appropriate"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index row size exceeds btree version 4 maximum",
+                                    errorCode: "54000",
+                                    severity: "Medium",
+                                    cause: "Index key size exceeds PostgreSQL's btree index limit (approximately 2712 bytes).",
+                                    resolution: "Reduce index key size by using hash indexes, partial indexes, or indexing only parts of large columns.",
+                                    parameters: "N/A",
+                                    tip: "Consider using hash indexes for equality searches on large text columns.",
+                                    troubleshooting: [
+                                        "Check key size: Calculate total size of indexed columns",
+                                        "Use partial index: `CREATE INDEX ON table (column) WHERE condition;`",
+                                        "Consider hash index: `CREATE INDEX ON table USING hash (large_column);`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not read block in file: Bad address",
+                                    errorCode: "XX001",
+                                    severity: "Critical",
+                                    cause: "Index corruption or hardware issues causing read failures.",
+                                    resolution: "REINDEX the affected index and check for hardware problems.",
+                                    parameters: "N/A",
+                                    tip: "Regular REINDEX operations can prevent and fix minor index corruption.",
+                                    troubleshooting: [
+                                        "Reindex table: `REINDEX TABLE table_name;`",
+                                        "Check hardware: Run disk diagnostics",
+                                        "Verify checksums: Enable data_checksums for corruption detection"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: operator class does not exist",
+                                    errorCode: "42704",
+                                    severity: "Medium",
+                                    cause: "Specified operator class for index creation does not exist for the given data type.",
+                                    resolution: "Use a valid operator class for the data type or create the index without specifying operator class.",
+                                    parameters: "N/A",
+                                    tip: "List available operator classes with \\dAo in psql.",
+                                    troubleshooting: [
+                                        "List operator classes: `SELECT opcname FROM pg_opclass;`",
+                                        "Check for data type: `SELECT opcname FROM pg_opclass WHERE opcintype = 'text'::regtype;`",
+                                        "Use default: Create index without specifying operator class"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: functions in index expression must be marked IMMUTABLE",
+                                    errorCode: "42P17",
+                                    severity: "Medium",
+                                    cause: "Attempting to create functional index using non-immutable functions.",
+                                    resolution: "Use only immutable functions in index expressions or create the function as immutable if appropriate.",
+                                    parameters: "N/A",
+                                    tip: "Functions that depend on database state or configuration cannot be used in indexes.",
+                                    troubleshooting: [
+                                        "Check function volatility: `SELECT proname, provolatile FROM pg_proc WHERE proname = 'function_name';`",
+                                        "Mark immutable: `ALTER FUNCTION function_name IMMUTABLE;` (only if truly immutable)",
+                                        "Use immutable alternative: Find or create immutable version of function"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index is not a btree",
+                                    errorCode: "XX000",
+                                    severity: "Low",
+                                    cause: "Operation requires btree index but a different index type (GIN, GiST, etc.) was provided.",
+                                    resolution: "Create a btree index for the operation or use operations supported by the existing index type.",
+                                    parameters: "N/A",
+                                    tip: "Different index types support different operations - btree for ranges, GIN for arrays/JSON.",
+                                    troubleshooting: [
+                                        "Check index type: `SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'table_name';`",
+                                        "Create btree: `CREATE INDEX ON table_name (column);` (btree is default)",
+                                        "Use appropriate operations for index type"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: cannot use subquery in index expression",
+                                    errorCode: "0A000",
+                                    severity: "Low",
+                                    cause: "Attempting to use subquery in functional index expression, which is not supported.",
+                                    resolution: "Rewrite the index expression without subqueries or use a different indexing strategy.",
+                                    parameters: "N/A",
+                                    tip: "Use computed columns or materialized views for complex index expressions.",
+                                    troubleshooting: [
+                                        "Simplify expression: Remove subqueries from index expression",
+                                        "Use computed column: Add calculated column to table",
+                                        "Consider partial index: Use WHERE clause instead of complex expression"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index row requires bytes, maximum size is bytes",
+                                    errorCode: "54000",
+                                    severity: "Medium",
+                                    cause: "Index entry size exceeds the maximum allowed size for the index type.",
+                                    resolution: "Reduce the size of indexed data or use different index type or strategy.",
+                                    parameters: "N/A",
+                                    tip: "Consider indexing only a prefix of large text columns using substring.",
+                                    troubleshooting: [
+                                        "Index prefix: `CREATE INDEX ON table (substring(large_column, 1, 100));`",
+                                        "Use hash index: `CREATE INDEX ON table USING hash (column);`",
+                                        "Split large columns: Normalize data to reduce column size"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: concurrent index creation on system catalogs is not supported",
+                                    errorCode: "0A000",
+                                    severity: "Low",
+                                    cause: "Attempting to create concurrent index on PostgreSQL system catalog tables.",
+                                    resolution: "Use regular index creation (without CONCURRENTLY) for system catalog modifications.",
+                                    parameters: "N/A",
+                                    tip: "System catalog modifications should be done during maintenance windows.",
+                                    troubleshooting: [
+                                        "Use regular CREATE INDEX without CONCURRENTLY",
+                                        "Plan maintenance window for system catalog changes",
+                                        "Consider if index on system catalog is really necessary"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index cannot have duplicate column names",
+                                    errorCode: "42701",
+                                    severity: "Low",
+                                    cause: "Attempting to create index with the same column listed multiple times.",
+                                    resolution: "Remove duplicate column references from the index definition.",
+                                    parameters: "N/A",
+                                    tip: "Check for typos in column names that might appear as duplicates.",
+                                    troubleshooting: [
+                                        "Review index definition: Check for repeated column names",
+                                        "Check for aliases: Ensure column aliases don't create duplicates",
+                                        "Verify column names: Use \\d table_name to see actual column names"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: access method does not support unique indexes",
+                                    errorCode: "0A000",
+                                    severity: "Medium",
+                                    cause: "Attempting to create unique index using access method that doesn't support uniqueness (like GIN).",
+                                    resolution: "Use btree index for unique constraints or choose appropriate access method.",
+                                    parameters: "N/A",
+                                    tip: "Only btree and hash indexes support unique constraints.",
+                                    troubleshooting: [
+                                        "Use btree: `CREATE UNIQUE INDEX ON table (column);` (btree is default)",
+                                        "Check requirements: Determine if uniqueness is actually needed",
+                                        "Consider exclusion constraints: For complex uniqueness requirements"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index cannot be created on inherited column",
+                                    errorCode: "42P16",
+                                    severity: "Medium",
+                                    cause: "Attempting to create index on inherited column directly instead of on the parent table.",
+                                    resolution: "Create the index on the parent table, which will apply to all child tables.",
+                                    parameters: "N/A",
+                                    tip: "Indexes on parent tables automatically apply to child tables in inheritance.",
+                                    troubleshooting: [
+                                        "Create on parent: `CREATE INDEX ON parent_table (column);`",
+                                        "Check inheritance: `SELECT * FROM pg_inherits;`",
+                                        "Verify column inheritance: Ensure column exists in parent table"
+                                    ]
+                                },
+                                {
+                                    message: "NOTICE: relation \"table_name\" already exists, skipping",
+                                    errorCode: "42P07",
+                                    severity: "Low",
+                                    cause: "Index creation with IF NOT EXISTS clause when index already exists.",
+                                    resolution: "This is informational - the existing index was preserved as intended.",
+                                    parameters: "N/A",
+                                    tip: "Use IF NOT EXISTS to avoid errors when index might already exist.",
+                                    troubleshooting: [
+                                        "Check existing indexes: `\\d table_name` or `SELECT * FROM pg_indexes;`",
+                                        "Verify index definition matches requirements",
+                                        "Consider dropping and recreating if definition differs"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: column used in index must be NOT NULL",
+                                    errorCode: "42804",
+                                    severity: "Medium",
+                                    cause: "Attempting to create unique index on column(s) that allow NULL values.",
+                                    resolution: "Add NOT NULL constraint to the column before creating unique index.",
+                                    parameters: "N/A",
+                                    tip: "PostgreSQL allows multiple NULL values even in unique indexes.",
+                                    troubleshooting: [
+                                        "Add NOT NULL: `ALTER TABLE table_name ALTER COLUMN column_name SET NOT NULL;`",
+                                        "Handle existing NULLs: Update or remove rows with NULL values first",
+                                        "Use partial index: `CREATE UNIQUE INDEX ON table (col) WHERE col IS NOT NULL;`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index scan does not support partial indexes",
+                                    errorCode: "XX000",
+                                    severity: "Low",
+                                    cause: "Query planner cannot use partial index for the current query conditions.",
+                                    resolution: "Ensure query WHERE clause matches the partial index predicate exactly.",
+                                    parameters: "N/A",
+                                    tip: "Partial index conditions must be explicitly matched in query WHERE clauses.",
+                                    troubleshooting: [
+                                        "Check index predicate: `SELECT indexname, indexdef FROM pg_indexes WHERE indexname = 'index_name';`",
+                                        "Match WHERE clause: Ensure query conditions include index predicate",
+                                        "Use EXPLAIN: Check if index is being used in query plan"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: cache lookup failed for index",
+                                    errorCode: "XX000",
+                                    severity: "Critical",
+                                    cause: "Internal error indicating index corruption or system catalog inconsistency.",
+                                    resolution: "REINDEX the affected index and check for system catalog corruption.",
+                                    parameters: "N/A",
+                                    tip: "This often indicates serious database corruption requiring immediate attention.",
+                                    troubleshooting: [
+                                        "Reindex: `REINDEX INDEX index_name;`",
+                                        "Check pg_index: `SELECT * FROM pg_index WHERE indexrelid = 'index_name'::regclass;`",
+                                        "Run VACUUM on system catalogs: `VACUUM pg_index, pg_class;`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index has wrong number of columns",
+                                    errorCode: "XX000",
+                                    severity: "Critical",
+                                    cause: "Index metadata corruption - stored column count doesn't match actual index definition.",
+                                    resolution: "REINDEX the corrupted index to rebuild with correct metadata.",
+                                    parameters: "N/A",
+                                    tip: "This indicates serious index corruption requiring immediate reindexing.",
+                                    troubleshooting: [
+                                        "Reindex immediately: `REINDEX INDEX index_name;`",
+                                        "Check index definition: `\\d+ table_name`",
+                                        "Consider full table reindex: `REINDEX TABLE table_name;`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: operator family does not exist",
+                                    errorCode: "42704",
+                                    severity: "Medium",
+                                    cause: "Specified operator family for index creation does not exist.",
+                                    resolution: "Use existing operator family or create the index without specifying operator family.",
+                                    parameters: "N/A",
+                                    tip: "Operator families group related operators for index access methods.",
+                                    troubleshooting: [
+                                        "List operator families: `SELECT opfname FROM pg_opfamily;`",
+                                        "Check for access method: `SELECT opfname FROM pg_opfamily WHERE opfmethod = (SELECT oid FROM pg_am WHERE amname = 'btree');`",
+                                        "Use default: Create index without specifying operator family"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: insufficient columns in GROUP BY clause",
+                                    errorCode: "42803",
+                                    severity: "Medium",
+                                    cause: "Query uses aggregate functions but GROUP BY doesn't include all non-aggregated columns, impacting index usage.",
+                                    resolution: "Add all non-aggregated columns to GROUP BY clause or use appropriate aggregate functions.",
+                                    parameters: "N/A",
+                                    tip: "Proper GROUP BY usage enables better index utilization for aggregation queries.",
+                                    troubleshooting: [
+                                        "Add columns to GROUP BY: Include all selected non-aggregated columns",
+                                        "Use aggregate functions: Wrap columns in appropriate aggregates (MIN, MAX, etc.)",
+                                        "Consider window functions: Use for complex aggregation scenarios"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: btree index operator family requires different left and right types",
+                                    errorCode: "22P02",
+                                    severity: "Medium",
+                                    cause: "Attempting comparison operations between incompatible data types in index context.",
+                                    resolution: "Ensure data types are compatible or use explicit casting in index expressions.",
+                                    parameters: "N/A",
+                                    tip: "Create composite indexes with compatible data types for multi-column operations.",
+                                    troubleshooting: [
+                                        "Check data types: `\\d+ table_name` to see column types",
+                                        "Use explicit casting: `CREATE INDEX ON table (column::target_type);`",
+                                        "Create separate indexes: One for each data type if necessary"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: could not determine which collation to use for index expression",
+                                    errorCode: "42P22",
+                                    severity: "Medium",
+                                    cause: "Ambiguous collation in index expression with multiple text columns having different collations.",
+                                    resolution: "Explicitly specify collation in the index expression using COLLATE clause.",
+                                    parameters: "N/A",
+                                    tip: "Consistent collation across indexed text columns improves performance.",
+                                    troubleshooting: [
+                                        "Specify collation: `CREATE INDEX ON table (column COLLATE \"C\");`",
+                                        "Check column collations: `SELECT column_name, collation_name FROM information_schema.columns;`",
+                                        "Use database default: `CREATE INDEX ON table (column COLLATE pg_catalog.default);`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index access method cannot handle NaN values",
+                                    errorCode: "22P02",
+                                    severity: "Medium",
+                                    cause: "Attempting to index floating-point columns containing NaN (Not a Number) values with incompatible access method.",
+                                    resolution: "Use btree index (default) which handles NaN, or filter out NaN values in partial index.",
+                                    parameters: "N/A",
+                                    tip: "Btree indexes handle NaN values by treating them as equal and greater than all other values.",
+                                    troubleshooting: [
+                                        "Use btree: `CREATE INDEX ON table (float_column);` (btree is default)",
+                                        "Filter NaN: `CREATE INDEX ON table (float_column) WHERE float_column IS NOT NULL AND NOT (float_column = 'NaN'::float);`",
+                                        "Check for NaN: `SELECT * FROM table WHERE float_column = 'NaN'::float;`"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: operator class does not accept data type",
+                                    errorCode: "42804",
+                                    severity: "Medium",
+                                    cause: "Specified operator class is not compatible with the column's data type.",
+                                    resolution: "Use appropriate operator class for the data type or let PostgreSQL choose automatically.",
+                                    parameters: "N/A",
+                                    tip: "PostgreSQL automatically selects appropriate operator classes based on data types.",
+                                    troubleshooting: [
+                                        "Check compatible operator classes: `SELECT opcname, opcintype::regtype FROM pg_opclass WHERE opcintype = 'your_type'::regtype;`",
+                                        "Use default: Create index without specifying operator class",
+                                        "Cast data type: Modify column type if appropriate operator class exists"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index cannot be used in recursive query",
+                                    errorCode: "0A000",
+                                    severity: "Low",
+                                    cause: "PostgreSQL cannot use certain indexes within recursive CTE queries.",
+                                    resolution: "Restructure query to avoid index dependencies in recursive part or use different query approach.",
+                                    parameters: "N/A",
+                                    tip: "Recursive queries have limitations on index usage to prevent infinite loops.",
+                                    troubleshooting: [
+                                        "Simplify recursive part: Remove complex index dependencies",
+                                        "Use non-recursive alternative: Consider iterative approaches",
+                                        "Split query: Separate recursive and non-recursive parts"
+                                    ]
+                                },
+                                {
+                                    message: "ERROR: index scan direction not supported",
+                                    errorCode: "XX000",
+                                    severity: "Low",
+                                    cause: "Requested scan direction (forward/backward) not supported by the index type.",
+                                    resolution: "Use appropriate ORDER BY clause or different index type that supports required scan direction.",
+                                    parameters: "N/A",
+                                    tip: "Btree indexes support both forward and backward scans, while other types may have limitations.",
+                                    troubleshooting: [
+                                        "Check index type: `SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'table_name';`",
+                                        "Use btree for bidirectional scans",
+                                        "Adjust ORDER BY: Use supported scan direction"
                                     ]
                                 }
                             ]
@@ -7579,6 +8792,100 @@ PUBLICATION my_pub;</code></pre>
                     document.querySelectorAll('.accordion-header').forEach(button => button.addEventListener('click', handleAccordionToggle));
                     document.querySelectorAll('.copy-btn').forEach(button => button.addEventListener('click', handleCopyClick));
                     document.querySelectorAll('.feedback-btn').forEach(button => button.addEventListener('click', handleFeedbackClick));
+                    
+                    // Mobile menu toggle functionality
+                    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+                    const mobileMenuToggleHeader = document.getElementById('mobile-menu-toggle-header');
+                    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+                    const sidebar = document.getElementById('sidebar');
+                    const mobileSearchToggle = document.getElementById('mobile-search-toggle');
+                    const mobileSearchContainer = document.getElementById('mobile-search-container');
+                    
+                    if (mobileMenuToggle) {
+                        mobileMenuToggle.classList.remove('hidden');
+                        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+                    }
+                    
+                    if (mobileMenuToggleHeader) {
+                        mobileMenuToggleHeader.addEventListener('click', toggleMobileMenu);
+                    }
+                    
+                    if (mobileMenuOverlay) {
+                        mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+                    }
+                    
+                    if (mobileSearchToggle) {
+                        mobileSearchToggle.addEventListener('click', () => {
+                            mobileSearchContainer.classList.toggle('hidden');
+                            if (!mobileSearchContainer.classList.contains('hidden')) {
+                                document.getElementById('mobile-search-input').focus();
+                            }
+                        });
+                    }
+                    
+                    // Mobile theme toggle
+                    const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+                    if (mobileThemeToggle) {
+                        mobileThemeToggle.addEventListener('click', () => {
+                            document.documentElement.classList.toggle('dark');
+                            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+                        });
+                    }
+                    
+                    // Handle window resize for responsive behavior
+                    window.addEventListener('resize', handleWindowResize);
+                    handleWindowResize(); // Call once on init
+                }
+                
+                function toggleMobileMenu() {
+                    const sidebar = document.getElementById('sidebar');
+                    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+                    
+                    if (sidebar.classList.contains('-translate-x-full')) {
+                        // Open menu
+                        sidebar.classList.remove('-translate-x-full');
+                        mobileMenuOverlay.classList.remove('hidden');
+                        document.body.classList.add('overflow-hidden'); // Prevent scrolling
+                    } else {
+                        // Close menu
+                        closeMobileMenu();
+                    }
+                }
+                
+                function closeMobileMenu() {
+                    const sidebar = document.getElementById('sidebar');
+                    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+                    
+                    sidebar.classList.add('-translate-x-full');
+                    mobileMenuOverlay.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden'); // Enable scrolling
+                }
+                
+                function handleWindowResize() {
+                    // Handle responsive layout adjustments on resize
+                    const isMobile = window.innerWidth < 640;
+                    const sidebar = document.getElementById('sidebar');
+                    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+                    
+                    if (!isMobile) {
+                        // On desktop/tablet, ensure sidebar is visible
+                        sidebar.classList.remove('-translate-x-full');
+                        mobileMenuOverlay.classList.add('hidden');
+                        document.body.classList.remove('overflow-hidden');
+                        
+                        // Hide mobile search if open
+                        const mobileSearchContainer = document.getElementById('mobile-search-container');
+                        if (mobileSearchContainer) {
+                            mobileSearchContainer.classList.add('hidden');
+                        }
+                    } else {
+                        // On mobile, hide sidebar by default
+                        if (!mobileMenuOverlay.classList.contains('hidden')) {
+                            // Only if overlay is visible (menu is open)
+                            sidebar.classList.add('-translate-x-full');
+                            mobileMenuOverlay.classList.add('hidden');
+                        }
+                    }
                 }
                 
                 function handleAccordionToggle(e) {
@@ -9013,3 +10320,4 @@ PUBLICATION my_pub;</code></pre>
     </script>
 </body>
 </html>
+
