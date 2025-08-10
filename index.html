@@ -29,6 +29,36 @@
         
         /* Enhanced mobile responsiveness - mobile-first approach */
         @media (max-width: 640px) {
+            /* Fix sidebar positioning and behavior */
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 85%;
+                max-width: 300px;
+                height: 100vh;
+                z-index: 60;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                backdrop-filter: blur(20px);
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            }
+            
+            #sidebar.show {
+                transform: translateX(0);
+            }
+            
+            /* Ensure main content takes full width on mobile */
+            main {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            
+            /* Hide desktop flex behaviors on mobile */
+            .flex.h-screen {
+                flex-direction: column;
+            }
+            
             .content-section {
                 margin-bottom: 1rem;
                 padding: 1rem;
@@ -109,15 +139,6 @@
                 overflow-x: auto;
             }
             
-            /* Mobile navigation improvements */
-            #sidebar {
-                transform: translateX(-100%);
-            }
-            
-            #sidebar.show {
-                transform: translateX(0);
-            }
-            
             /* Touch-friendly elements */
             button, .button {
                 min-height: 44px;
@@ -178,23 +199,60 @@
                 max-width: 100%;
                 height: auto !important;
             }
+            
+            /* Mobile menu button positioning */
+            #mobile-menu-toggle {
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 70;
+                background: rgba(59, 130, 246, 0.9);
+                backdrop-filter: blur(10px);
+            }
         }
         
         @media (max-width: 768px) {
+            /* Force proper mobile layout */
+            .flex.h-screen {
+                display: block !important;
+                height: auto !important;
+            }
+            
+            main {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            
             .grid-cols-2, .grid-cols-3, .grid-cols-4 {
                 grid-template-columns: 1fr !important;
             }
             
             /* Enhanced sidebar behavior for tablets */
             #sidebar {
-                position: fixed;
-                z-index: 50;
-                width: 85%;
-                max-width: 320px;
-                height: 100vh;
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                backdrop-filter: blur(20px);
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+                position: fixed !important;
+                z-index: 60 !important;
+                width: 85% !important;
+                max-width: 320px !important;
+                height: 100vh !important;
+                top: 0 !important;
+                left: 0 !important;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                backdrop-filter: blur(20px) !important;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+                transform: translateX(-100%) !important;
+            }
+            
+            #sidebar.show,
+            #sidebar:not(.-translate-x-full) {
+                transform: translateX(0) !important;
+            }
+            
+            /* Fix header positioning */
+            header {
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 40 !important;
+                width: 100% !important;
             }
             
             /* Improved tab navigation */
@@ -261,6 +319,12 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 1rem;
+            }
+            
+            /* Fix content padding when sidebar is closed */
+            .content-wrapper {
+                padding-left: 0 !important;
+                margin-left: 0 !important;
             }
         }
         
@@ -2326,9 +2390,9 @@
     <!-- Mobile Menu Overlay (only visible when menu is open) -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
 
-    <div class="flex h-screen bg-base-50 dark:bg-base-900">
+    <div class="flex h-screen bg-base-50 dark:bg-base-900 relative">
         <!-- Sidebar Navigation -->
-        <aside id="sidebar" class="w-72 bg-white dark:bg-base-800 border-r border-base-200 dark:border-base-700 flex flex-col transition-transform -translate-x-full sm:translate-x-0 sm:flex">
+        <aside id="sidebar" class="w-72 bg-white dark:bg-base-800 border-r border-base-200 dark:border-base-700 flex flex-col transition-transform duration-300 ease-in-out -translate-x-full sm:translate-x-0 sm:flex fixed sm:relative z-50 h-full">
             <div class="p-4 border-b border-base-200 dark:border-base-700 flex items-center space-x-3">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PostgreSQL Logo" class="h-8 w-8">
                 <h1 class="text-xl font-bold text-base-900 dark:text-white">PostgreSQL Knowledge Base</h1>
@@ -2352,20 +2416,20 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 flex flex-col overflow-hidden">
+        <main class="flex-1 flex flex-col overflow-hidden sm:ml-0">
             <!-- Mobile Header (only visible on small screens) -->
             <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 sm:hidden flex items-center justify-between sticky top-0 z-30">
                 <div class="flex items-center">
-                    <button id="mobile-menu-toggle-header" class="mr-3 text-base-600 dark:text-base-300">
+                    <button id="mobile-menu-toggle-header" class="mr-3 text-base-600 dark:text-base-300 p-2 rounded-lg hover:bg-base-100 dark:hover:bg-base-700">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                     <h1 class="text-lg font-bold text-primary-600 dark:text-primary-400">PostgreSQL KB</h1>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button id="mobile-search-toggle" class="p-2 text-base-600 dark:text-base-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none">
+                    <button id="mobile-search-toggle" class="p-2 text-base-600 dark:text-base-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none rounded-lg hover:bg-base-100 dark:hover:bg-base-700">
                         <i class="fa-solid fa-search"></i>
                     </button>
-                    <button id="mobile-theme-toggle" class="p-2 text-base-600 dark:text-base-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none">
+                    <button id="mobile-theme-toggle" class="p-2 text-base-600 dark:text-base-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none rounded-lg hover:bg-base-100 dark:hover:bg-base-700">
                         <i class="fa-solid fa-moon dark:hidden"></i>
                         <i class="fa-solid fa-sun hidden dark:block"></i>
                     </button>
@@ -9295,6 +9359,7 @@ PUBLICATION my_pub;</code></pre>
                     const mobileSearchToggle = document.getElementById('mobile-search-toggle');
                     const mobileSearchContainer = document.getElementById('mobile-search-container');
                     
+                    // Add event listeners for both mobile menu buttons
                     if (mobileMenuToggle) {
                         mobileMenuToggle.classList.remove('hidden');
                         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
@@ -9306,6 +9371,18 @@ PUBLICATION my_pub;</code></pre>
                     
                     if (mobileMenuOverlay) {
                         mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+                    }
+                    
+                    // Close mobile menu when clicking on navigation items
+                    if (sidebar) {
+                        sidebar.addEventListener('click', (e) => {
+                            // Close menu when clicking on navigation links (but not buttons)
+                            if (e.target.matches('a[href]') || e.target.closest('a[href]')) {
+                                if (window.innerWidth < 640) {
+                                    setTimeout(closeMobileMenu, 100); // Small delay for smooth transition
+                                }
+                            }
+                        });
                     }
                     
                     if (mobileSearchToggle) {
@@ -9348,14 +9425,20 @@ PUBLICATION my_pub;</code></pre>
                     const sidebar = document.getElementById('sidebar');
                     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
                     
-                    if (sidebar.classList.contains('-translate-x-full')) {
-                        // Open menu
-                        sidebar.classList.remove('-translate-x-full');
-                        mobileMenuOverlay.classList.remove('hidden');
-                        document.body.classList.add('overflow-hidden'); // Prevent scrolling
-                    } else {
-                        // Close menu
-                        closeMobileMenu();
+                    if (sidebar && mobileMenuOverlay) {
+                        // Check if menu is currently closed (has -translate-x-full class)
+                        const isMenuClosed = sidebar.classList.contains('-translate-x-full');
+                        
+                        if (isMenuClosed) {
+                            // Open menu
+                            sidebar.classList.remove('-translate-x-full');
+                            sidebar.classList.add('show');
+                            mobileMenuOverlay.classList.remove('hidden');
+                            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                        } else {
+                            // Close menu
+                            closeMobileMenu();
+                        }
                     }
                 }
                 
@@ -9363,9 +9446,12 @@ PUBLICATION my_pub;</code></pre>
                     const sidebar = document.getElementById('sidebar');
                     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
                     
-                    sidebar.classList.add('-translate-x-full');
-                    mobileMenuOverlay.classList.add('hidden');
-                    document.body.classList.remove('overflow-hidden'); // Enable scrolling
+                    if (sidebar && mobileMenuOverlay) {
+                        sidebar.classList.add('-translate-x-full');
+                        sidebar.classList.remove('show');
+                        mobileMenuOverlay.classList.add('hidden');
+                        document.body.style.overflow = ''; // Restore scrolling
+                    }
                 }
                 
                 function handleWindowResize() {
@@ -9376,59 +9462,51 @@ PUBLICATION my_pub;</code></pre>
                     const chatWidget = document.getElementById('chat-widget');
                     
                     if (!isMobile) {
-                        // On desktop/tablet, ensure sidebar is visible
-                        sidebar.classList.remove('-translate-x-full');
-                        mobileMenuOverlay.classList.add('hidden');
-                        document.body.classList.remove('overflow-hidden');
+                        // On desktop/tablet, ensure sidebar is visible and reset mobile classes
+                        if (sidebar) {
+                            sidebar.classList.remove('-translate-x-full', 'show');
+                            sidebar.style.transform = ''; // Clear any inline transforms
+                        }
+                        if (mobileMenuOverlay) {
+                            mobileMenuOverlay.classList.add('hidden');
+                        }
+                        document.body.style.overflow = ''; // Restore scrolling
                         
                         // Hide mobile search if open
                         const mobileSearchContainer = document.getElementById('mobile-search-container');
                         if (mobileSearchContainer) {
                             mobileSearchContainer.classList.add('hidden');
                         }
-                        
-                        // Adjust chat widget position for desktop
-                        if (chatWidget && !chatWidget.classList.contains('hidden')) {
-                            chatWidget.style.height = 'auto';
-                            chatWidget.style.maxHeight = '80vh';
-                        }
                     } else {
-                        // On mobile, hide sidebar by default
-                        if (!mobileMenuOverlay.classList.contains('hidden')) {
-                            // Only if overlay is visible (menu is open)
-                            sidebar.classList.add('-translate-x-full');
-                            mobileMenuOverlay.classList.add('hidden');
-                        }
-                        
-                        // Adjust chat widget position for mobile
-                        if (chatWidget && !chatWidget.classList.contains('hidden')) {
-                            chatWidget.style.height = '70vh';
-                            
-                            // Make sure chat widget doesn't extend beyond viewport
-                            const viewportHeight = window.innerHeight;
-                            const chatBottom = chatWidget.getBoundingClientRect().bottom;
-                            
-                            if (chatBottom > viewportHeight) {
-                                chatWidget.style.bottom = '0';
-                                chatWidget.style.maxHeight = '70vh';
+                        // On mobile, ensure sidebar starts hidden
+                        if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
+                            // Only add the class if it's not already there (to avoid closing manually opened menu)
+                            if (!sidebar.classList.contains('show')) {
+                                sidebar.classList.add('-translate-x-full');
                             }
                         }
-                        
-                        // Fix any overflowing elements
-                        document.querySelectorAll('.overflow-x-auto').forEach(el => {
-                            if (el.scrollWidth > el.clientWidth) {
-                                el.style.webkitOverflowScrolling = 'touch';
-                            }
-                        });
                     }
                     
-                    // Adjust code blocks to prevent horizontal overflow
-                    document.querySelectorAll('pre').forEach(pre => {
-                        if (pre.scrollWidth > pre.clientWidth) {
-                            pre.style.whiteSpace = isMobile ? 'pre-wrap' : 'pre';
-                            pre.style.wordBreak = isMobile ? 'break-word' : 'normal';
+                    // Adjust chat widget position for mobile
+                    if (chatWidget) {
+                        if (isMobile) {
+                            chatWidget.style.right = '2.5%';
+                            chatWidget.style.left = '2.5%';
+                            chatWidget.style.maxWidth = '95%';
+                        } else {
+                            chatWidget.style.right = '2rem';
+                            chatWidget.style.left = 'auto';
+                            chatWidget.style.maxWidth = '24rem';
                         }
-                    });
+                    }
+                    
+                    // Re-render charts if needed for responsive behavior
+                    if (typeof renderDashboardChart === 'function' && document.getElementById('overviewChart')) {
+                        clearTimeout(window.chartResizeTimeout);
+                        window.chartResizeTimeout = setTimeout(() => {
+                            renderDashboardChart();
+                        }, 250);
+                    }
                 }
                 
                 function handleAccordionToggle(e) {
