@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>PostgreSQL DB Knowledge Base</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" type="image/svg+xml">
     <meta name="theme-color" content="#0284c7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -411,7 +412,7 @@
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <link id="prism-theme" rel="stylesheet" href="" />
     <script>
         // Tailwind CSS configuration for dark mode and custom primary colors
         tailwind.config = {
@@ -1906,7 +1907,7 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Mobile Menu Toggle Button (only visible on small screens) -->
-    <button id="mobile-menu-toggle" class="fixed top-4 left-4 z-50 p-3 rounded-full bg-primary-600 text-white shadow-lg block sm:hidden focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+    <button id="mobile-menu-toggle" class="fixed top-4 left-4 z-50 p-3 rounded-full bg-primary-600 text-white shadow-lg block lg:hidden focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
         <i class="fa-solid fa-bars text-xl"></i>
     </button>
     
@@ -1915,7 +1916,7 @@
 
     <div class="flex h-screen bg-base-50 dark:bg-base-900">
         <!-- Sidebar Navigation -->
-        <aside id="sidebar" class="w-72 bg-white dark:bg-base-800 border-r border-base-200 dark:border-base-700 flex flex-col transition-transform -translate-x-full sm:translate-x-0 sm:flex">
+        <aside id="sidebar" class="w-4/5 max-w-xs lg:w-64 bg-white dark:bg-base-800 border-r border-base-200 dark:border-base-700 flex flex-col transition-transform -translate-x-full lg:translate-x-0 lg:flex">
             <div class="p-4 border-b border-base-200 dark:border-base-700 flex items-center space-x-3">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PostgreSQL Logo" class="h-8 w-8">
                 <h1 class="text-xl font-bold text-base-900 dark:text-white">PostgreSQL Knowledge Base</h1>
@@ -1941,7 +1942,7 @@
         <!-- Main Content Area -->
         <main class="flex-1 flex flex-col overflow-hidden">
             <!-- Mobile Header (only visible on small screens) -->
-            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 sm:hidden flex items-center justify-between sticky top-0 z-30">
+            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 lg:hidden flex items-center justify-between sticky top-0 z-30">
                 <div class="flex items-center">
                     <button id="mobile-menu-toggle-header" class="mr-3 text-base-600 dark:text-base-300">
                         <i class="fa-solid fa-bars text-xl"></i>
@@ -1960,7 +1961,7 @@
             </header>
             
             <!-- Mobile Search Bar (hidden by default) -->
-            <div id="mobile-search-container" class="bg-white dark:bg-base-800 p-4 border-b border-base-200 dark:border-base-700 hidden sm:hidden">
+            <div id="mobile-search-container" class="bg-white dark:bg-base-800 p-4 border-b border-base-200 dark:border-base-700 hidden lg:hidden">
                 <div class="relative">
                     <input type="text" id="mobile-search-input" placeholder="Search knowledge base..." class="w-full p-2 pl-10 border border-base-300 dark:border-base-600 rounded-lg">
                     <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-base-400"></i>
@@ -1968,9 +1969,9 @@
             </div>
             
             <!-- Desktop Header (hidden on small screens) -->
-            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 hidden sm:flex justify-between items-center shadow-sm">
+            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 hidden lg:flex justify-between items-center shadow-sm">
                 <div class="flex items-center">
-                    <button id="menu-toggle" class="sm:hidden p-2 text-base-600 dark:text-base-300 hover:bg-base-100 dark:hover:bg-base-700 rounded-lg mr-2">
+                    <button id="menu-toggle" class="lg:hidden p-2 text-base-600 dark:text-base-300 hover:bg-base-100 dark:hover:bg-base-700 rounded-lg mr-2">
                         <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                     <div id="breadcrumb" class="text-sm text-base-500 dark:text-base-400"></div>
@@ -2914,7 +2915,199 @@
                 getting_started: {
                     title: "Getting Started",
                     icon: "fa-solid fa-rocket",
-                    content: `<div class="prose dark:prose-invert max-w-none"><h2>What is PostgreSQL?</h2><p>PostgreSQL is a powerful, open-source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.</p><h2>Installation</h2><p>The best way to install PostgreSQL is through your operating system's package manager or by using the official installers. Refer to the <a href="https://www.postgresql.org/download/" target="_blank" rel="noopener noreferrer">official documentation</a> for detailed instructions for your OS.</p><h3>First Connection</h3><p>Once installed, you can connect to your database using the <code>psql</code> command-line tool.</p><pre><code class="language-bash">psql -U your_user -d your_database -h localhost</code></pre><h3>Creating Your First Database and Table</h3><p>Use these SQL commands to create a new database and a simple table within it.</p><pre><code class="language-sql">CREATE DATABASE my_first_db;\n\\c my_first_db;\n\nCREATE TABLE employees (\n    id SERIAL PRIMARY KEY,\n    first_name VARCHAR(50),\n    last_name VARCHAR(50),\n    hire_date DATE\n);</code></pre><h3>Basic SQL Commands</h3><p>Here are the fundamental commands for interacting with your data:</p><pre><code class="language-sql">-- Insert data\nINSERT INTO employees (first_name, last_name, hire_date) VALUES ('John', 'Doe', '2025-01-15');\n\n-- Select data\nSELECT * FROM employees;\n\n-- Update data\nUPDATE employees SET last_name = 'Smith' WHERE first_name = 'John';\n\n-- Delete data\nDELETE FROM employees WHERE first_name = 'John';</code></pre></div>`
+                    content: `<div class="prose dark:prose-invert max-w-none space-y-12">
+                        
+                        <!-- Introduction -->
+                        <div class="p-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/50 dark:to-indigo-900/50 rounded-2xl">
+                            <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Welcome to PostgreSQL!</h2>
+                            <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">This guide will walk you through the essential first steps with PostgreSQL, from installation to running your first queries. Let's begin your journey with the world's most advanced open-source relational database.</p>
+                        </div>
+
+                        <!-- Why PostgreSQL? -->
+                        <div>
+                            <h3 class="text-2xl font-bold">Why Choose PostgreSQL?</h3>
+                            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="p-6 bg-base-100 dark:bg-base-800 rounded-lg"><i class="fa-solid fa-shield-halved text-2xl text-green-500 mb-2"></i><h4 class="font-semibold">Reliability & Stability</h4><p class="text-sm">ACID compliant with a 30+ year track record.</p></div>
+                                <div class="p-6 bg-base-100 dark:bg-base-800 rounded-lg"><i class="fa-solid fa-cogs text-2xl text-blue-500 mb-2"></i><h4 class="font-semibold">Powerful Features</h4><p class="text-sm">Supports JSONB, full-text search, and advanced indexing.</p></div>
+                                <div class="p-6 bg-base-100 dark:bg-base-800 rounded-lg"><i class="fa-solid fa-arrows-spin text-2xl text-purple-500 mb-2"></i><h4 class="font-semibold">Extensible</h4><p class="text-sm">Create custom functions, data types, and extensions.</p></div>
+                            </div>
+                        </div>
+
+                        <!-- Setup Flowchart -->
+                        <div class="diagram-container">
+                            <h4 class="text-lg font-semibold text-center mb-4">Your First Steps: A Visual Guide</h4>
+                            <svg width="100%" viewBox="0 0 800 150" xmlns="http://www.w3.org/2000/svg">
+                                <style>.txt{font-family:Inter,sans-serif;font-size:12px;}.dark .txt{fill:white;} .dark .line{stroke:white;} .dark .box{stroke:white;fill:#1e293b;}</style>
+                                <defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/></marker></defs>
+                                <!-- Step 1: Install -->
+                                <rect x="20" y="40" width="120" height="50" rx="5" fill="#e0f2fe" class="box" stroke="#38bdf8"/><text x="80" y="68" text-anchor="middle" class="txt">1. Install</text>
+                                <!-- Step 2: Connect -->
+                                <rect x="200" y="40" width="120" height="50" rx="5" fill="#e0f2fe" class="box" stroke="#38bdf8"/><text x="260" y="68" text-anchor="middle" class="txt">2. Connect (psql)</text>
+                                <!-- Step 3: Create -->
+                                <rect x="380" y="40" width="120" height="50" rx="5" fill="#e0f2fe" class="box" stroke="#38bdf8"/><text x="440" y="68" text-anchor="middle" class="txt">3. Create DB/Table</text>
+                                <!-- Step 4: Query -->
+                                <rect x="560" y="40" width="120" height="50" rx="5" fill="#e0f2fe" class="box" stroke="#38bdf8"/><text x="620" y="68" text-anchor="middle" class="txt">4. Run Queries</text>
+                                <!-- Arrows -->
+                                <path d="M 140 65 h 60" stroke="#64748b" class="line" stroke-width="2" marker-end="url(#arrow)"/>
+                                <path d="M 320 65 h 60" stroke="#64748b" class="line" stroke-width="2" marker-end="url(#arrow)"/>
+                                <path d="M 500 65 h 60" stroke="#64748b" class="line" stroke-width="2" marker-end="url(#arrow)"/>
+                            </svg>
+                        </div>
+
+                        <!-- Step 1: Installation -->
+                        <div>
+                            <h3 class="text-2xl font-bold">Step 1: Installation</h3>
+                            <p class="mt-2">The best way to install PostgreSQL is through your operating system's package manager or by using the official installers from the PostgreSQL website.</p>
+                            <div class="mt-4 tab-navigation">
+                                <button class="tab-button active" data-tab="linux">Linux (APT)</button>
+                                <button class="tab-button" data-tab="macos">macOS (Homebrew)</button>
+                                <button class="tab-button" data-tab="windows">Windows</button>
+                            </div>
+                            <div class="mt-2">
+                                <div id="linux-tab" class="tab-content active">
+                                    <p>For Debian/Ubuntu-based systems:</p>
+                                    <pre><code class="language-bash">sudo apt update\nsudo apt install postgresql postgresql-contrib</code></pre>
+                                </div>
+                                <div id="macos-tab" class="tab-content">
+                                    <p>Using Homebrew is the recommended method:</p>
+                                    <pre><code class="language-bash">brew update\nbrew install postgresql</code></pre>
+                                </div>
+                                <div id="windows-tab" class="tab-content">
+                                    <p>Download the interactive installer from the <a href="https://www.postgresql.org/download/windows/" target="_blank" rel="noopener noreferrer" class="text-primary-600 dark:text-primary-400 hover:underline">official website</a>. It will guide you through the setup process and include the pgAdmin GUI tool.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: First Connection -->
+                        <div>
+                            <h3 class="text-2xl font-bold">Step 2: Your First Connection</h3>
+                            <p class="mt-2">After installation, PostgreSQL creates a default user (often <code>postgres</code> or your OS username) and a default database. You can connect using the command-line tool <code>psql</code>.</p>
+                            <div class="diagram-container my-4">
+                                <h4 class="text-lg font-semibold text-center mb-4">Client-Server Connection</h4>
+                                <div class="ascii-art text-center">
+[ Your Terminal ]      <==== Network ====>      [ PostgreSQL Server ]
+      psql  ----------------------------------->  Postmaster Process
+                                                        |
+                                                  (Authenticates)
+                                                        |
+                                                  (Forks new process)
+                                                        |
+                                                  [ Backend Process ] <-----> [ Your Session ]
+                                </div>
+                            </div>
+                            <pre><code class="language-bash"># On Linux, you might need to switch to the postgres user first
+sudo -u postgres psql
+
+# On macOS or Windows (with PATH set up)
+psql -U your_username -d postgres</code></pre>
+                            <p class="mt-2"><code>psql</code> is a powerful interactive terminal. Here are some essential "meta-commands" (commands that start with a backslash):</p>
+                            <ul class="list-disc list-inside">
+                                <li><code>\\l</code> - List all databases.</li>
+                                <li><code>\\c [db_name]</code> - Connect to a different database.</li>
+                                <li><code>\\dt</code> - List all tables in the current database.</li>
+                                <li><code>\\d [table_name]</code> - Describe a table (show its columns).</li>
+                                <li><code>\\?</code> - Get help on meta-commands.</li>
+                                <li><code>\\q</code> - Quit psql.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Step 3: Create Database and Table -->
+                        <div>
+                            <h3 class="text-2xl font-bold">Step 3: Your First Database & Table</h3>
+                            <p class="mt-2">Let's create a dedicated database and a simple table for a project.</p>
+                            <pre><code class="language-sql">-- 1. Create a new database for our project
+CREATE DATABASE my_project_db;
+
+-- 2. Connect to your new database
+\\c my_project_db;
+
+-- 3. Create a table to store employee data
+CREATE TABLE employees (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    hire_date DATE DEFAULT CURRENT_DATE
+);</code></pre>
+                            <div class="mt-4 p-4 bg-base-100 dark:bg-base-800 rounded-lg">
+                                <h4 class="font-bold">Deconstructing the <code>CREATE TABLE</code> statement:</h4>
+                                <ul class="list-disc list-inside mt-2 text-sm space-y-1">
+                                    <li><code>SERIAL PRIMARY KEY</code>: An auto-incrementing integer that uniquely identifies each row.</li>
+                                    <li><code>VARCHAR(50)</code>: A text field with a maximum length of 50 characters.</li>
+                                    <li><code>NOT NULL</code>: A constraint ensuring this field must have a value.</li>
+                                    <li><code>UNIQUE</code>: A constraint ensuring every value in this column is unique across all rows.</li>
+                                    <li><code>DATE</code>: A data type for storing dates.</li>
+                                    <li><code>DEFAULT CURRENT_DATE</code>: If no hire date is provided, it will automatically use the current date.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Basic SQL Commands (CRUD) -->
+                        <div>
+                            <h3 class="text-2xl font-bold">Step 4: Interacting with Data (CRUD)</h3>
+                            <p class="mt-2">CRUD stands for Create, Read, Update, and Delete—the four fundamental operations of data management.</p>
+                            <pre><code class="language-sql">-- CREATE: Add a new employee
+INSERT INTO employees (first_name, last_name, email) VALUES ('Alice', 'Wonderland', 'alice@example.com');
+
+-- READ: Select all employees
+SELECT * FROM employees;
+
+-- READ: Select a specific employee by ID
+SELECT * FROM employees WHERE id = 1;
+
+-- UPDATE: Change an employee's last name
+UPDATE employees SET last_name = 'Smith' WHERE first_name = 'Alice';
+
+-- DELETE: Remove an employee from the table
+DELETE FROM employees WHERE id = 1;</code></pre>
+                        </div>
+
+                        <!-- Check Your Understanding -->
+                        <div>
+                            <h3 class="text-2xl font-bold">Check Your Understanding</h3>
+                            <div class="mt-4 space-y-4">
+                                <div class="accordion-item p-4">
+                                    <button class="accordion-header w-full flex justify-between items-center text-left font-semibold">
+                                        <span>Q1: What psql meta-command lists all tables?</span>
+                                        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                                    </button>
+                                    <div class="solution pt-2 text-gray-600 dark:text-gray-300">
+                                        <p>The <code>\\dt</code> command is used to list all tables in the current database schema.</p>
+                                    </div>
+                                </div>
+                                <div class="accordion-item p-4">
+                                    <button class="accordion-header w-full flex justify-between items-center text-left font-semibold">
+                                        <span>Q2: What does <code>SERIAL PRIMARY KEY</code> do?</span>
+                                        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                                    </button>
+                                    <div class="solution pt-2 text-gray-600 dark:text-gray-300">
+                                        <p>It creates an auto-incrementing integer column that serves as the unique identifier (Primary Key) for each row in the table. It's a convenient way to ensure every row has a unique ID.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Next Steps -->
+                        <div>
+                            <h3 class="text-2xl font-bold">Next Steps</h3>
+                            <p class="mt-2">Congratulations! You've covered the basics. Now you're ready to explore more advanced topics.</p>
+                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="p-6 bg-base-100 dark:bg-base-800 rounded-lg hover:bg-base-200 dark:hover:bg-base-700 transition-colors">
+                                    <a href="#" onclick="renderPage('architecture')" class="block">
+                                        <h4 class="font-bold text-primary-600 dark:text-primary-400">Dive into the Architecture <i class="fa-solid fa-arrow-right"></i></h4>
+                                        <p class="text-sm">Understand how PostgreSQL works under the hood.</p>
+                                    </a>
+                                </div>
+                                <div class="p-6 bg-base-100 dark:bg-base-800 rounded-lg hover:bg-base-200 dark:hover:bg-base-700 transition-colors">
+                                    <a href="#" onclick="renderPage('glossary')" class="block">
+                                        <h4 class="font-bold text-primary-600 dark:text-primary-400">Learn the Lingo <i class="fa-solid fa-arrow-right"></i></h4>
+                                        <p class="text-sm">Get familiar with key terms in the Glossary.</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>`
                 },
                 architecture: {
                     title: "PostgreSQL Architecture",
