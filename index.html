@@ -20,12 +20,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Enhanced dark mode with better contrast and improved transitions */
         .dark { 
@@ -33,7 +27,7 @@
             color: #f1f5f9; 
         }
         
-        /* Improved mobile responsiveness */
+        /* Enhanced mobile responsiveness - mobile-first approach */
         @media (max-width: 640px) {
             .content-section {
                 margin-bottom: 1rem;
@@ -59,20 +53,27 @@
                 font-size: 1rem !important;
             }
             
-            /* Mobile-optimized buttons */
+            /* Mobile-optimized floating buttons */
             #back-to-top-btn, #print-page-btn, #chat-toggle-button {
-                width: 40px;
-                height: 40px;
+                width: 44px;
+                height: 44px;
                 padding: 0.5rem;
                 bottom: 1rem;
+                border-radius: 50%;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                transition: all 0.3s ease;
             }
             
             #back-to-top-btn {
-                right: 60px;
+                right: 70px;
             }
             
             #print-page-btn {
-                right: 110px;
+                right: 130px;
+            }
+            
+            #chat-toggle-button {
+                right: 10px;
             }
             
             /* Better table handling on small screens */
@@ -80,12 +81,16 @@
                 display: block;
                 overflow-x: auto;
                 white-space: nowrap;
+                border-radius: 0.5rem;
+                margin: 1rem 0;
             }
             
             /* Code blocks on mobile */
             pre {
                 max-width: 100%;
                 font-size: 12px;
+                overflow-x: auto;
+                border-radius: 0.5rem;
             }
             
             /* Mobile-friendly chat widget */
@@ -93,12 +98,37 @@
                 max-width: 95%;
                 right: 2.5%;
                 left: 2.5%;
+                bottom: 5rem;
+                border-radius: 1rem;
             }
             
-            /* Adjust font sizes for readability on small screens */
+            /* Adjust visual content for mobile */
             .diagram-container, .visual-content {
                 transform: scale(0.9);
                 transform-origin: left top;
+                overflow-x: auto;
+            }
+            
+            /* Mobile navigation improvements */
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            
+            #sidebar.show {
+                transform: translateX(0);
+            }
+            
+            /* Touch-friendly elements */
+            button, .button {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 0.75rem 1rem;
+            }
+            
+            /* Mobile form elements */
+            input, select, textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 0.75rem;
             }
             
             /* Improved spacing on mobile */
@@ -121,6 +151,33 @@
             .m-6 {
                 margin: 1rem !important;
             }
+            
+            /* Mobile-first typography */
+            h1 {
+                font-size: 1.75rem !important;
+                line-height: 1.3;
+            }
+            
+            h2 {
+                font-size: 1.5rem !important;
+                line-height: 1.3;
+            }
+            
+            h3 {
+                font-size: 1.25rem !important;
+                line-height: 1.4;
+            }
+            
+            /* Dashboard charts on mobile */
+            #chart-container {
+                overflow-x: auto;
+                padding: 0.5rem;
+            }
+            
+            canvas {
+                max-width: 100%;
+                height: auto !important;
+            }
         }
         
         @media (max-width: 768px) {
@@ -128,34 +185,43 @@
                 grid-template-columns: 1fr !important;
             }
             
-            /* Adjust sidebar behavior */
+            /* Enhanced sidebar behavior for tablets */
             #sidebar {
                 position: fixed;
                 z-index: 50;
-                width: 80%;
-                max-width: 300px;
+                width: 85%;
+                max-width: 320px;
                 height: 100vh;
-                transition: transform 0.3s ease-in-out;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                backdrop-filter: blur(20px);
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             }
             
             /* Improved tab navigation */
             .tab-navigation {
                 flex-wrap: wrap;
+                gap: 0.5rem;
+                padding: 0.5rem;
             }
             
             .tab-button {
                 font-size: 0.875rem;
-                padding: 0.5rem 0.75rem;
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                flex: 1;
+                min-width: auto;
+                text-align: center;
             }
             
-            /* Better spacing for mobile content */
+            /* Better spacing for tablet content */
             .space-y-8 {
-                row-gap: 1.5rem !important;
+                row-gap: 2rem !important;
             }
             
-            /* Grid layout fixes for mobile */
+            /* Enhanced grid layout fixes for tablets */
             .grid-cols-3 {
                 grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1.5rem !important;
             }
             
             .lg\:grid-cols-2 {
@@ -165,9 +231,175 @@
             .lg\:grid-cols-3 {
                 grid-template-columns: repeat(2, 1fr) !important;
             }
+            
+            /* Main content area adjustments */
+            .main-content {
+                padding: 1rem;
+                margin-top: 0;
+            }
+            
+            /* Search bar improvements */
+            #search-bar {
+                margin: 1rem 0;
+                width: 100%;
+            }
+            
+            /* Navigation improvements */
+            .navbar {
+                padding: 0.75rem 1rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            /* Issue cards on tablets */
+            .issue-card {
+                margin-bottom: 1rem;
+                border-radius: 0.75rem;
+            }
+            
+            /* Statistics grid on tablets */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem;
+            }
         }
         
-        /* Modern glassmorphism content sections */
+        /* Additional mobile optimizations for perfect experience */
+        @media (max-width: 1024px) {
+            /* Tablet and mobile layout adjustments */
+            .main-container {
+                flex-direction: column;
+            }
+            
+            #sidebar {
+                width: 100%;
+                max-width: 100%;
+                position: relative;
+                transform: none;
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            /* Hide desktop sidebar, show mobile navigation */
+            .desktop-sidebar {
+                display: none;
+            }
+            
+            .mobile-navigation {
+                display: block;
+            }
+        }
+        
+        /* Ultra-wide screen optimizations */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1600px;
+                margin: 0 auto;
+            }
+            
+            .content-section {
+                max-width: 1400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            #sidebar, #mobile-menu-overlay, #chat-widget, 
+            #back-to-top-btn, #print-page-btn, #chat-toggle-button,
+            .no-print {
+                display: none !important;
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            
+            .content-section {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            
+            body {
+                font-size: 12pt;
+                line-height: 1.4;
+            }
+            
+            h1, h2, h3 {
+                break-after: avoid;
+            }
+        }
+        
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .content-section {
+                border: 2px solid;
+                background: transparent;
+            }
+            
+            button, .button {
+                border: 2px solid;
+                background: transparent;
+            }
+        }
+        
+        /* Focus styles for accessibility */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        
+        /* Better touch targets */
+        .touch-target {
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Improved loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+            position: relative;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         .content-section {
             margin-bottom: 2rem;
             padding: 2rem;
@@ -8875,11 +9107,13 @@ PUBLICATION my_pub;</code></pre>
                             return;
                         }
                         
-                        // Properly destroy previous chart instance to prevent memory leaks
-                        if (chartInstance) {
+                        // Properly destroy previous chart instance to prevent memory leaks and theme issues
+                        if (window.chartInstance) {
                             try {
-                                chartInstance.destroy();
-                                chartInstance = null;
+                                window.chartInstance.destroy();
+                                window.chartInstance = null;
+                                // Clear the canvas completely
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
                             } catch (err) {
                                 console.warn('Error destroying previous chart instance:', err);
                             }
@@ -8900,10 +9134,13 @@ PUBLICATION my_pub;</code></pre>
                         return;
                     }
                     
-                    const isDarkMode = document.documentElement.classList.contains('dark');
+                    // Get current theme with better detection
+                    const isDarkMode = document.documentElement.classList.contains('dark') || 
+                                     document.documentElement.getAttribute('data-theme') === 'dark';
                     const textColor = isDarkMode ? '#f1f5f9' : '#334155';
+                    const backgroundColor = isDarkMode ? '#1e293b' : '#ffffff';
                     
-                    // Define theme-specific color palettes - use highly contrasting colors for dark mode
+                    // Enhanced theme-specific color palettes with better contrast
                     const lightModeColors = [
                         '#0284c7', '#0ea5e9', '#38bdf8', '#7dd3fc', '#bae6fd',  // Blues
                         '#3b82f6', '#60a5fa', '#93c5fd',                         // Indigos
@@ -8914,17 +9151,17 @@ PUBLICATION my_pub;</code></pre>
                     ];
                     
                     const darkModeColors = [
-                        '#38bdf8', '#60a5fa', '#93c5fd', '#3b82f6', '#2563eb',   // Blues/Indigos (brighter)
-                        '#c084fc', '#a855f7', '#d8b4fe', '#e9d5ff', '#8b5cf6',   // Purples (brighter)
-                        '#67e8f9', '#22d3ee', '#0ea5e9', '#0284c7', '#0369a1',   // Cyans/Blues (brighter)
-                        '#4ade80', '#34d399', '#10b981', '#059669', '#047857',   // Greens (brighter)
-                        '#fb923c', '#f97316', '#ea580c', '#facc15', '#eab308'    // Oranges/Yellows (warm contrasting)
+                        '#60a5fa', '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af',   // Bright blues
+                        '#a78bfa', '#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6',   // Bright purples
+                        '#34d399', '#10b981', '#059669', '#047857', '#065f46',   // Bright greens
+                        '#fbbf24', '#f59e0b', '#d97706', '#b45309', '#92400e',   // Bright yellows/oranges
+                        '#f87171', '#ef4444', '#dc2626', '#b91c1c', '#991b1b'    // Bright reds
                     ];
                     
                     // Choose palette based on current theme
                     const colorPalette = isDarkMode ? darkModeColors : lightModeColors;
                     
-                    // Ensure we have enough colors by repeating the palette if needed
+                    // Ensure we have enough colors by cycling through the palette
                     const chartColors = [];
                     for (let i = 0; i < data.length; i++) {
                         chartColors.push(colorPalette[i % colorPalette.length]);
@@ -8950,7 +9187,8 @@ PUBLICATION my_pub;</code></pre>
                         }
                     };
 
-                    chartInstance = new Chart(ctx, {
+                    // Create new chart instance with enhanced configuration
+                    window.chartInstance = new Chart(ctx, {
                         type: 'doughnut',
                         data: {
                             labels: labels,
@@ -8958,31 +9196,89 @@ PUBLICATION my_pub;</code></pre>
                                 label: '# of Issues',
                                 data: data,
                                 backgroundColor: chartColors,
-                                borderColor: isDarkMode ? '#1e293b' : '#fff',
-                                borderWidth: 4,
-                                hoverOffset: 15,
-                                hoverBorderColor: isDarkMode ? '#334155' : '#e2e8f0'
+                                borderColor: backgroundColor,
+                                borderWidth: 3,
+                                hoverOffset: 12,
+                                hoverBorderColor: isDarkMode ? '#475569' : '#cbd5e1',
+                                hoverBorderWidth: 2
                             }]
                         },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
                             cutout: '70%',
+                            interaction: {
+                                intersect: false,
+                                mode: 'nearest'
+                            },
+                            animation: {
+                                animateRotate: true,
+                                animateScale: true,
+                                duration: 800,
+                                easing: 'easeInOutCubic'
+                            },
                             plugins: {
-                                legend: { position: 'right', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, color: textColor, font: { size: 14 } } },
-                                tooltip: { callbacks: { label: (c) => `${c.label || ''}: ${c.raw || 0} issues (${totalIssues > 0 ? ((c.raw / totalIssues) * 100).toFixed(2) + '%' : '0.00%'})` } }
+                                legend: { 
+                                    position: 'right', 
+                                    labels: { 
+                                        usePointStyle: true, 
+                                        pointStyle: 'circle', 
+                                        padding: 20, 
+                                        color: textColor, 
+                                        font: { 
+                                            size: 14,
+                                            family: getComputedStyle(document.body).fontFamily
+                                        }
+                                    } 
+                                },
+                                tooltip: { 
+                                    backgroundColor: isDarkMode ? '#374151' : '#ffffff',
+                                    titleColor: textColor,
+                                    bodyColor: textColor,
+                                    borderColor: isDarkMode ? '#6b7280' : '#d1d5db',
+                                    borderWidth: 1,
+                                    cornerRadius: 8,
+                                    displayColors: true,
+                                    callbacks: { 
+                                        label: (c) => {
+                                            const percentage = totalIssues > 0 ? ((c.raw / totalIssues) * 100).toFixed(1) : '0.0';
+                                            return `${c.label || ''}: ${c.raw || 0} issues (${percentage}%)`;
+                                        }
+                                    }
+                                }
                             },
                             onClick: (evt, elements) => {
                                 if (elements.length > 0) {
                                     const categoryKey = categories[elements[0].index];
-                                    if (categoryKey) renderPage(categoryKey);
+                                    if (categoryKey) {
+                                        renderPage(categoryKey);
+                                    }
                                 }
                             }
                         },
                         plugins: [centerTextPlugin]
                     });
+                    
+                    // Force update to ensure theme colors are applied
+                    window.chartInstance.update('none');
+                    
                 } catch (error) {
                     console.error('Error rendering dashboard chart:', error);
+                    // Show fallback content if chart fails
+                    const canvas = document.getElementById('overviewChart');
+                    if (canvas) {
+                        const container = canvas.parentElement;
+                        if (container) {
+                            container.innerHTML = `
+                                <div class="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-chart-pie text-4xl mb-4"></i>
+                                        <p>Chart temporarily unavailable</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
                 }
                 }
                 
@@ -10651,6 +10947,108 @@ PUBLICATION my_pub;</code></pre>
             // Make export functions globally accessible
             window.exportDiagramToPDF = exportDiagramToPDF;
             window.exportSolutionToPDF = exportSolutionToPDF;
+            
+            // Enhanced mobile initialization and optimizations
+            function initializeMobileExperience() {
+                // Detect mobile device capabilities
+                const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isAndroidDevice = /Android/.test(navigator.userAgent);
+                const isMobileDevice = window.innerWidth <= 768;
+                
+                if (isTouchDevice) {
+                    document.body.classList.add('touch-device');
+                }
+                
+                if (isIOSDevice) {
+                    document.body.classList.add('ios-device');
+                    // Fix iOS viewport height issue
+                    function updateViewportHeight() {
+                        const vh = window.innerHeight * 0.01;
+                        document.documentElement.style.setProperty('--vh', `${vh}px`);
+                    }
+                    updateViewportHeight();
+                    window.addEventListener('resize', updateViewportHeight);
+                    window.addEventListener('orientationchange', updateViewportHeight);
+                }
+                
+                if (isAndroidDevice) {
+                    document.body.classList.add('android-device');
+                }
+                
+                if (isMobileDevice) {
+                    document.body.classList.add('mobile-device');
+                }
+                
+                // Optimize for high-density displays
+                if (window.devicePixelRatio > 1.5) {
+                    document.body.classList.add('high-dpi');
+                }
+                
+                // Add performance optimization for scrolling
+                if (CSS.supports('overscroll-behavior', 'contain')) {
+                    document.body.style.overscrollBehavior = 'contain';
+                }
+                
+                // Enhanced accessibility for mobile
+                if (isTouchDevice) {
+                    // Improve touch target sizes
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        .touch-device button,
+                        .touch-device .touch-target,
+                        .touch-device a {
+                            min-height: 44px;
+                            min-width: 44px;
+                        }
+                        
+                        .touch-device input,
+                        .touch-device select,
+                        .touch-device textarea {
+                            font-size: 16px; /* Prevents zoom on iOS */
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
+                // Optimize images for mobile
+                const images = document.querySelectorAll('img');
+                images.forEach(img => {
+                    if (!img.loading) {
+                        img.loading = 'lazy';
+                    }
+                    if (!img.decoding) {
+                        img.decoding = 'async';
+                    }
+                });
+                
+                // Add mobile-specific event listeners
+                if (isTouchDevice) {
+                    // Optimize touch scrolling
+                    document.addEventListener('touchstart', () => {}, { passive: true });
+                    document.addEventListener('touchmove', () => {}, { passive: true });
+                }
+                
+                // Mobile performance monitoring
+                if (isMobileDevice && 'connection' in navigator) {
+                    const connection = navigator.connection;
+                    if (connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')) {
+                        document.body.classList.add('slow-connection');
+                        // Disable heavy animations for slow connections
+                        const style = document.createElement('style');
+                        style.textContent = `
+                            .slow-connection * {
+                                animation-duration: 0.1s !important;
+                                transition-duration: 0.1s !important;
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+                }
+            }
+            
+            // Initialize mobile experience
+            initializeMobileExperience();
             
             // Initialize performance utilities
             document.addEventListener('DOMContentLoaded', () => {
