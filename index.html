@@ -2424,11 +2424,11 @@
     </button>
     
     <!-- Mobile Menu Overlay (only visible when menu is open) -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
 
-    <div class="flex h-screen bg-base-50 dark:bg-base-900 relative">
+    <div class="relative min-h-screen lg:flex">
         <!-- Sidebar Navigation -->
-        <aside id="sidebar" class="w-72 bg-white dark:bg-base-800 border-r border-base-200 dark:border-base-700 flex flex-col transition-transform duration-300 ease-in-out -translate-x-full sm:translate-x-0 sm:flex fixed sm:relative z-50 h-full">
+        <aside id="sidebar" class="bg-white dark:bg-base-800 text-base-900 dark:text-white w-72 flex-shrink-0 fixed inset-y-0 left-0 z-50 transform -translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out border-r border-base-200 dark:border-base-700 flex flex-col">
             <div class="p-4 border-b border-base-200 dark:border-base-700 flex items-center space-x-3">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PostgreSQL Logo" class="h-8 w-8">
                 <h1 class="text-xl font-bold text-base-900 dark:text-white">PostgreSQL Knowledge Base</h1>
@@ -2452,9 +2452,9 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 flex flex-col overflow-hidden sm:ml-0">
+        <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Mobile Header (only visible on small screens) -->
-            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 sm:hidden flex items-center justify-between sticky top-0 z-30">
+            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 lg:hidden flex items-center justify-between sticky top-0 z-30">
                 <div class="flex items-center">
                     <button id="mobile-menu-toggle-header" class="mr-3 text-base-600 dark:text-base-300 p-2 rounded-lg hover:bg-base-100 dark:hover:bg-base-700">
                         <i class="fa-solid fa-bars text-xl"></i>
@@ -2473,7 +2473,7 @@
             </header>
             
             <!-- Mobile Search Bar (hidden by default) -->
-            <div id="mobile-search-container" class="bg-white dark:bg-base-800 p-4 border-b border-base-200 dark:border-base-700 hidden sm:hidden">
+            <div id="mobile-search-container" class="bg-white dark:bg-base-800 p-4 border-b border-base-200 dark:border-base-700 hidden lg:hidden">
                 <div class="relative">
                     <input type="text" id="mobile-search-input" placeholder="Search knowledge base..." class="w-full p-2 pl-10 border border-base-300 dark:border-base-600 rounded-lg">
                     <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-base-400"></i>
@@ -2481,11 +2481,8 @@
             </div>
             
             <!-- Desktop Header (hidden on small screens) -->
-            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 hidden sm:flex justify-between items-center shadow-sm">
+            <header class="bg-white dark:bg-base-800 border-b border-base-200 dark:border-base-700 p-4 hidden lg:flex justify-between items-center shadow-sm">
                 <div class="flex items-center">
-                    <button id="menu-toggle" class="sm:hidden p-2 text-base-600 dark:text-base-300 hover:bg-base-100 dark:hover:bg-base-700 rounded-lg mr-2">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
                     <div id="breadcrumb" class="text-sm text-base-500 dark:text-base-400"></div>
                 </div>
                 <div id="filter-container" class="hidden sm:flex items-center gap-4 w-full max-w-md">
@@ -2514,7 +2511,7 @@
             <div id="content-area" class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8" role="main" id="main-content" aria-label="Main content area">
                 <!-- Content is rendered here by startApp() -->
             </div>
-        </main>
+        </div>
     </div>
     
     <!-- Keyboard Shortcuts Indicator -->
@@ -9462,17 +9459,20 @@ PUBLICATION my_pub;</code></pre>
                     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
                     
                     if (sidebar && mobileMenuOverlay) {
-                        // Check if menu is currently open (has show class)
-                        const isMenuOpen = sidebar.classList.contains('show');
+                        const isMenuOpen = sidebar.classList.contains('show') || sidebar.classList.contains('lg:translate-x-0');
                         
-                        if (isMenuOpen) {
-                            // Close menu
-                            closeMobileMenu();
+                        if (isMenuOpen && window.innerWidth < 1024) {
+                            // Close menu on mobile/tablet
+                            sidebar.classList.remove('show');
+                            sidebar.classList.add('-translate-x-full');
+                            mobileMenuOverlay.classList.add('hidden');
+                            document.body.style.overflow = '';
                         } else {
-                            // Open menu
+                            // Open menu on mobile/tablet
                             sidebar.classList.add('show');
+                            sidebar.classList.remove('-translate-x-full');
                             mobileMenuOverlay.classList.remove('hidden');
-                            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                            document.body.style.overflow = 'hidden';
                             
                             // Add focus management for accessibility
                             const firstFocusable = sidebar.querySelector('button, a, input, [tabindex]:not([tabindex="-1"])');
@@ -9489,60 +9489,31 @@ PUBLICATION my_pub;</code></pre>
                     
                     if (sidebar && mobileMenuOverlay) {
                         sidebar.classList.remove('show');
+                        sidebar.classList.add('-translate-x-full');
                         mobileMenuOverlay.classList.add('hidden');
                         document.body.style.overflow = ''; // Restore scrolling
                     }
                 }
                 
                 function handleWindowResize() {
-                    // Handle responsive layout adjustments on resize
-                    const isMobile = window.innerWidth < 640;
-                    const isTablet = window.innerWidth >= 640 && window.innerWidth < 1024;
+                    const isMobile = window.innerWidth < 1024;
                     const sidebar = document.getElementById('sidebar');
                     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-                    const chatWidget = document.getElementById('chat-widget');
                     
-                    if (!isMobile && !isTablet) {
-                        // On desktop, ensure sidebar is visible and reset mobile classes
+                    if (!isMobile) {
+                        // On desktop, ensure sidebar is visible and mobile overlay is hidden
                         if (sidebar) {
-                            sidebar.classList.remove('show');
-                            sidebar.style.transform = ''; // Clear any inline transforms
+                            sidebar.classList.remove('show', '-translate-x-full');
+                            sidebar.classList.add('lg:translate-x-0');
                         }
                         if (mobileMenuOverlay) {
                             mobileMenuOverlay.classList.add('hidden');
                         }
                         document.body.style.overflow = ''; // Restore scrolling
-                        
-                        // Hide mobile search if open
-                        const mobileSearchContainer = document.getElementById('mobile-search-container');
-                        if (mobileSearchContainer) {
-                            mobileSearchContainer.classList.add('hidden');
-                        }
-                    } else if (isMobile) {
-                        // On mobile, ensure proper mobile state
+                    } else {
+                        // On mobile/tablet, ensure menu is hidden by default unless explicitly shown
                         if (sidebar && !sidebar.classList.contains('show')) {
-                            // Only ensure overlay is hidden if menu is not manually opened
-                            if (mobileMenuOverlay) {
-                                mobileMenuOverlay.classList.add('hidden');
-                            }
-                        }
-                    }
-                    
-                    // Adjust chat widget position for different screen sizes
-                    if (chatWidget) {
-                        if (isMobile) {
-                            chatWidget.style.width = '95%';
-                            chatWidget.style.right = '2.5%';
-                            chatWidget.style.left = '2.5%';
-                            chatWidget.style.maxHeight = '70vh';
-                            chatWidget.style.bottom = '5rem';
-                        } else {
-                            chatWidget.style.width = '';
-                            chatWidget.style.maxWidth = '24rem';
-                            chatWidget.style.right = '2rem';
-                            chatWidget.style.left = 'auto';
-                            chatWidget.style.maxHeight = '80vh';
-                            chatWidget.style.bottom = '6rem';
+                            sidebar.classList.add('-translate-x-full');
                         }
                     }
                     
