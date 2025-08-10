@@ -15,6 +15,7 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
@@ -39,6 +40,132 @@
                 0 16px 48px rgba(0, 0, 0, 0.6),
                 0 8px 24px rgba(0, 0, 0, 0.3),
                 inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Enhanced Dashboard Styles */
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-icon-container {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .btn-hover-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .trending-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .health-metric {
+            transition: all 0.3s ease;
+        }
+        
+        .chart-insight {
+            transition: all 0.3s ease;
+        }
+        
+        .chart-insight:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .activity-marker {
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.9), 0 0 0 8px rgba(255, 255, 255, 0.1);
+        }
+        
+        .dark .activity-marker {
+            box-shadow: 0 0 0 4px #1e293b, 0 0 0 8px rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Animated background particles */
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(10px, -20px);
+            }
+            50% {
+                transform: translate(20px, 0px);
+            }
+            75% {
+                transform: translate(10px, 20px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+        
+        /* Pulse animation for counter updates */
+        .pulse-animation {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Notification system */
+        .notification {
+            max-width: 320px;
+            min-width: 250px;
         }
         
         /* Enhanced section titles with gradient text */
@@ -1900,6 +2027,252 @@
             }
         }
     </style>
+
+    <!-- Dashboard Enhancement Styles -->
+    <style>
+        /* Animated Dashboard Background */
+        #animated-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            opacity: 0.7;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 120, 0.1);
+            animation: float-around 20s infinite linear;
+        }
+        
+        @keyframes float-around {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(100px, 50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(50px, 100px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-50px, 50px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+        
+        .dark .particle {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Button Hover Effects */
+        .quick-action-btn {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .quick-action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-hover-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+            z-index: 0;
+        }
+        
+        .dark .btn-hover-effect {
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+        }
+        
+        .btn-icon-container {
+            position: relative;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+        
+        .btn-icon-container i {
+            position: relative;
+            z-index: 1;
+            font-size: 16px;
+        }
+        
+        /* Theme Transition Effects */
+        .theme-transition {
+            transition: all 0.5s ease-in-out !important;
+        }
+        
+        /* Notification Animation */
+        .notification {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .dark .notification {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Timeline Markers */
+        .timeline-marker {
+            flex-shrink: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            position: relative;
+            margin-top: 3px;
+        }
+        
+        .timeline-marker::after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: calc(100% + 12px);
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+        
+        .activity-timeline > div:last-child .timeline-marker::after {
+            display: none;
+        }
+        
+        .dark .timeline-marker::after {
+            background-color: #475569;
+        }
+        
+        /* Pulse animation for real-time updates */
+        @keyframes pulse-animation {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .pulse-animation {
+            animation: pulse-animation 0.5s ease-in-out;
+        }
+        
+        /* Activity timeline styles */
+        .activity-timeline {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+        }
+        
+        .activity-timeline::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .activity-timeline::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .activity-timeline::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5);
+            border-radius: 20px;
+        }
+        
+        .timeline-marker {
+            height: 8px;
+            width: 8px;
+            background-color: #3b82f6; /* blue-500 */
+            border-radius: 50%;
+            margin-top: 4px;
+            position: relative;
+        }
+        
+        .timeline-marker::after {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 2px;
+            background-color: rgba(156, 163, 175, 0.3); /* gray-400 with opacity */
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+            height: 20px;
+        }
+        
+        .activity-timeline > div:last-child .timeline-marker::after {
+            display: none;
+        }
+        
+        .dark .timeline-marker::after {
+            background-color: rgba(107, 114, 128, 0.3); /* gray-500 with opacity for dark mode */
+        }
+        
+        /* Quick action button styling */
+        .quick-action-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            border-radius: 8px;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .quick-action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-icon-container {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-icon-container i {
+            color: white;
+            font-size: 1rem;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body class="bg-base-50 dark:bg-base-900 text-base-800 dark:text-base-200">
     
@@ -2533,6 +2906,11 @@
                     }
                 });
                 
+                // Apply theme-specific dashboard enhancements
+                if (typeof this.updateDashboardTheme === 'function') {
+                    this.updateDashboardTheme();
+                }
+                
                 // Ensure we completely destroy and recreate the chart to avoid theme inconsistencies
                 requestAnimationFrame(() => {
                     // Force destroy any existing chart instance
@@ -2566,12 +2944,87 @@
                 setTimeout(() => {
                     document.documentElement.style.transition = '';
                 }, 300);
+                
+                // Apply theme-specific dashboard enhancements with animation
+                this.updateDashboardTheme(true);
+            }
+            
+            updateDashboardTheme(animate = false) {
+                // Get theme
+                const isDarkTheme = document.documentElement.classList.contains('dark');
+                
+                // Update chart colors if chart exists
+                if (window.overviewChart) {
+                    const chartColors = isDarkTheme ? 
+                        ['rgba(59, 130, 246, 0.8)', 'rgba(16, 185, 129, 0.8)', 'rgba(249, 115, 22, 0.8)', 'rgba(239, 68, 68, 0.8)'] : 
+                        ['rgba(37, 99, 235, 0.8)', 'rgba(5, 150, 105, 0.8)', 'rgba(234, 88, 12, 0.8)', 'rgba(220, 38, 38, 0.8)'];
+                    
+                    window.overviewChart.data.datasets.forEach((dataset, i) => {
+                        dataset.backgroundColor = chartColors[i % chartColors.length];
+                    });
+                    
+                    window.overviewChart.update();
+                }
+                
+                // Update dashboard animated background if it exists
+                const animatedBg = document.getElementById('animated-bg');
+                if (animatedBg) {
+                    const particles = animatedBg.querySelectorAll('.particle');
+                    particles.forEach(particle => {
+                        if (isDarkTheme) {
+                            particle.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                        } else {
+                            particle.style.backgroundColor = 'rgba(0, 0, 120, 0.1)';
+                        }
+                        
+                        if (animate) {
+                            particle.classList.add('theme-transition');
+                            setTimeout(() => {
+                                particle.classList.remove('theme-transition');
+                            }, 1000);
+                        }
+                    });
+                }
+                
+                // Update health metric colors
+                const healthMetrics = document.querySelectorAll('.health-metric');
+                healthMetrics.forEach(metric => {
+                    const progressBar = metric.querySelector('div > div');
+                    if (!progressBar) return;
+                    
+                    // Apply theme-specific gradient
+                    if (isDarkTheme) {
+                        progressBar.style.background = 'linear-gradient(to right, #1e40af, #3b82f6)';
+                    } else {
+                        progressBar.style.background = 'linear-gradient(to right, #2563eb, #60a5fa)';
+                    }
+                    
+                    if (animate) {
+                        progressBar.classList.add('theme-transition');
+                        setTimeout(() => {
+                            progressBar.classList.remove('theme-transition');
+                        }, 1000);
+                    }
+                });
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize theme manager
             window.themeManager = new ThemeManager();
+            
+            // Initialize dashboard enhancements
+            if (typeof window.initAnimatedBackground === 'function') {
+                window.initAnimatedBackground();
+            }
+            
+            if (typeof window.initDashboardInteractivity === 'function') {
+                window.initDashboardInteractivity();
+            }
+            
+            if (typeof window.simulateRealTimeData === 'function') {
+                window.simulateRealTimeData();
+            }
             
             // Register dashboard updates on theme change
             window.themeManager.onThemeChange(theme => {
@@ -2605,23 +3058,93 @@
                     icon: "fa-solid fa-chart-pie",
                     content: `
                         <div class="space-y-8">
-                            <!-- Welcome Header -->
-                            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-2xl shadow-lg">
-                                <h1 class="text-3xl font-bold mb-2">Welcome to PostgreSQL Knowledge Base</h1>
-                                <p class="text-blue-100 text-lg">Your comprehensive guide to PostgreSQL database management, troubleshooting, and optimization.</p>
-                                <div class="mt-4 quick-actions">
-                                    <button class="quick-action-btn" onclick="renderPage('getting_started')">
-                                        <i class="fa-solid fa-rocket"></i> Get Started
-                                    </button>
-                                    <button class="quick-action-btn" onclick="renderPage('error_guide')">
-                                        <i class="fa-solid fa-bug"></i> Fix Issues
-                                    </button>
-                                    <button class="quick-action-btn" onclick="renderPage('performance_tuning')">
-                                        <i class="fa-solid fa-tachometer-alt"></i> Optimize Performance
-                                    </button>
-                                    <button class="quick-action-btn" onclick="renderPage('glossary')">
-                                        <i class="fa-solid fa-book"></i> Learn Concepts
-                                    </button>
+                            <!-- Enhanced Welcome Header with animated background and interactive elements -->
+                            <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+                                <div class="absolute inset-0 opacity-10">
+                                    <div class="absolute top-0 left-0 w-full h-full" id="animated-bg"></div>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <span class="bg-white/20 px-2 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">v15.4</span>
+                                        <span class="bg-green-500/20 px-2 py-1 rounded-full text-xs font-semibold backdrop-blur-sm flex items-center">
+                                            <span class="w-2 h-2 bg-green-400 rounded-full mr-1"></span>
+                                            System Status: Optimal
+                                        </span>
+                                    </div>
+                                    <h1 class="text-3xl font-bold mb-2">Welcome to PostgreSQL Knowledge Base</h1>
+                                    <p class="text-blue-100 text-lg">Your comprehensive guide to PostgreSQL database management, troubleshooting, and optimization.</p>
+                                    <div class="flex items-center gap-2 mt-3 text-sm text-white/70">
+                                        <span>Last updated: August 11, 2025</span>
+                                        <span class="w-1 h-1 bg-white/50 rounded-full"></span>
+                                        <span id="active-users"><i class="fa-solid fa-user-group text-xs mr-1"></i> 247 users online</span>
+                                    </div>
+                                    
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        <span class="text-xs text-white/80 bg-white/10 px-2 py-1 rounded-full flex items-center gap-1">
+                                            <i class="fa-solid fa-arrow-trend-up text-yellow-300"></i> Trending: 
+                                        </span>
+                                        <span class="text-xs bg-white/10 px-2 py-1 rounded-full hover:bg-white/20 cursor-pointer transition-colors">Connection Pooling</span>
+                                        <span class="text-xs bg-white/10 px-2 py-1 rounded-full hover:bg-white/20 cursor-pointer transition-colors">Index Optimization</span>
+                                        <span class="text-xs bg-white/10 px-2 py-1 rounded-full hover:bg-white/20 cursor-pointer transition-colors">Error 42P01</span>
+                                        <span class="text-xs bg-white/10 px-2 py-1 rounded-full hover:bg-white/20 cursor-pointer transition-colors">Performance Tuning</span>
+                                    </div>
+                                    
+                                    <div class="mt-6 quick-actions grid grid-cols-2 md:grid-cols-4 gap-3">
+                                        <button class="quick-action-btn group" onclick="renderPage('getting_started')">
+                                            <div class="btn-icon-container">
+                                                <i class="fa-solid fa-rocket"></i>
+                                                <div class="btn-hover-effect"></div>
+                                            </div>
+                                            <div class="flex flex-col items-start">
+                                                <span class="font-medium">Get Started</span>
+                                                <span class="text-xs text-white/70 group-hover:text-white">Installation & Setup</span>
+                                            </div>
+                                        </button>
+                                        <button class="quick-action-btn group" onclick="renderPage('error_guide')">
+                                            <div class="btn-icon-container">
+                                                <i class="fa-solid fa-bug"></i>
+                                                <div class="btn-hover-effect"></div>
+                                            </div>
+                                            <div class="flex flex-col items-start">
+                                                <span class="font-medium">Fix Issues</span>
+                                                <span class="text-xs text-white/70 group-hover:text-white">Troubleshooting Guide</span>
+                                            </div>
+                                        </button>
+                                        <button class="quick-action-btn group" onclick="renderPage('performance_tuning')">
+                                            <div class="btn-icon-container">
+                                                <i class="fa-solid fa-gauge-high"></i>
+                                                <div class="btn-hover-effect"></div>
+                                            </div>
+                                            <div class="flex flex-col items-start">
+                                                <span class="font-medium">Optimize</span>
+                                                <span class="text-xs text-white/70 group-hover:text-white">Performance Tuning</span>
+                                            </div>
+                                        </button>
+                                        <button class="quick-action-btn group" onclick="renderPage('glossary')">
+                                            <div class="btn-icon-container">
+                                                <i class="fa-solid fa-book"></i>
+                                                <div class="btn-hover-effect"></div>
+                                            </div>
+                                            <div class="flex flex-col items-start">
+                                                <span class="font-medium">Learn</span>
+                                                <span class="text-xs text-white/70 group-hover:text-white">Key Concepts</span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="mt-6 pt-4 border-t border-white/20 flex flex-wrap gap-2">
+                                        <span class="trending-tag">
+                                            <i class="fa-solid fa-arrow-trend-up text-xs mr-1"></i> 
+                                            <span>Performance Optimization</span>
+                                        </span>
+                                        <span class="trending-tag">
+                                            <i class="fa-solid fa-arrow-trend-up text-xs mr-1"></i>
+                                            <span>JSONB Functions</span>
+                                        </span>
+                                        <span class="trending-tag">
+                                            <i class="fa-solid fa-arrow-trend-up text-xs mr-1"></i>
+                                            <span>Connection Pooling</span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -2637,15 +3160,212 @@
                             <div id="overview-tab" class="tab-content active">
                                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="dashboard-stats"></div>
                                 <div class="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
-                                    <div class="lg:col-span-3 bg-white dark:bg-base-800 p-6 rounded-lg shadow-sm">
-                                        <h3 class="text-lg font-semibold text-base-800 dark:text-white mb-4">Issue Distribution by Category</h3>
-                                        <div class="chart-container relative mx-auto w-full h-96">
-                                            <canvas id="overviewChart"></canvas>
+                                    <div class="lg:col-span-3">
+                                        <!-- Enhanced chart section with tabs and filters -->
+                                        <div class="bg-white dark:bg-base-800 p-6 rounded-lg shadow-lg border border-base-200 dark:border-base-700">
+                                            <div class="flex justify-between items-center mb-4">
+                                                <h3 class="text-lg font-semibold text-base-800 dark:text-white">Database Analytics</h3>
+                                                <div class="chart-controls flex gap-2">
+                                                    <select id="chart-view-selector" class="text-xs px-2 py-1 bg-base-100 dark:bg-base-700 border border-base-300 dark:border-base-600 rounded">
+                                                        <option value="category">By Category</option>
+                                                        <option value="severity">By Severity</option>
+                                                        <option value="monthly">Monthly Trend</option>
+                                                    </select>
+                                                    <button id="chart-download-btn" class="text-xs flex items-center gap-1 px-2 py-1 bg-base-100 dark:bg-base-700 border border-base-300 dark:border-base-600 rounded hover:bg-base-200 dark:hover:bg-base-600">
+                                                        <i class="fa-solid fa-download text-xs"></i>
+                                                        <span>Export</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="chart-container relative mx-auto w-full h-96">
+                                                <canvas id="overviewChart"></canvas>
+                                            </div>
+                                            <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-center text-xs">
+                                                <div class="chart-insight bg-base-50 dark:bg-base-700/50 p-2 rounded border border-base-200 dark:border-base-600">
+                                                    <span class="font-bold text-lg text-red-600 dark:text-red-400">+12%</span>
+                                                    <p>Critical issues trend</p>
+                                                </div>
+                                                <div class="chart-insight bg-base-50 dark:bg-base-700/50 p-2 rounded border border-base-200 dark:border-base-600">
+                                                    <span class="font-bold text-lg text-green-600 dark:text-green-400">-8%</span>
+                                                    <p>Issue resolution time</p>
+                                                </div>
+                                                <div class="chart-insight bg-base-50 dark:bg-base-700/50 p-2 rounded border border-base-200 dark:border-base-600">
+                                                    <span class="font-bold text-lg text-blue-600 dark:text-blue-400">243</span>
+                                                    <p>Open tickets</p>
+                                                </div>
+                                                <div class="chart-insight bg-base-50 dark:bg-base-700/50 p-2 rounded border border-base-200 dark:border-base-600">
+                                                    <span class="font-bold text-lg text-purple-600 dark:text-purple-400">87%</span>
+                                                    <p>Documentation coverage</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="lg:col-span-2 bg-white dark:bg-base-800 p-6 rounded-lg shadow-sm">
+                                    <div class="lg:col-span-2">
+                                        <div class="bg-white dark:bg-base-800 p-6 rounded-lg shadow-lg border border-base-200 dark:border-base-700 mb-6">
+                                            <div class="flex justify-between items-center mb-4">
+                                                <h3 class="text-lg font-semibold text-base-800 dark:text-white flex items-center gap-2">
+                                                    <i class="fa-solid fa-server text-blue-500 dark:text-blue-400"></i>
+                                                    System Health
+                                                </h3>
+                                                <div class="flex items-center gap-2">
+                                                    <span class="flex items-center gap-1.5">
+                                                        <span class="relative flex h-2.5 w-2.5">
+                                                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                                                        </span>
+                                                        <span class="text-xs text-green-600 dark:text-green-400 font-medium">Live</span>
+                                                    </span>
+                                                    <button class="p-1 rounded-full hover:bg-base-100 dark:hover:bg-base-700" title="Refresh metrics">
+                                                        <i class="fa-solid fa-arrows-rotate text-xs text-base-500 dark:text-base-400"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-5 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800 flex items-center justify-between">
+                                                <div class="flex items-center gap-2">
+                                                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-800">
+                                                        <i class="fa-solid fa-database text-blue-600 dark:text-blue-400"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="text-sm font-medium text-blue-700 dark:text-blue-300">Primary Database</div>
+                                                        <div class="text-xs text-blue-600 dark:text-blue-400">Status: <span class="font-medium">Healthy</span></div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-xs px-2 py-1 rounded-full bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 font-medium">
+                                                    <i class="fa-solid fa-circle-check mr-1"></i> Online
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="grid grid-cols-2 gap-4 mb-5">
+                                                <div class="health-metric">
+                                                    <div class="flex justify-between items-center mb-1">
+                                                        <span class="text-sm font-medium">Connections</span>
+                                                        <span class="text-xs font-bold text-green-600 dark:text-green-400">85%</span>
+                                                    </div>
+                                                    <div class="h-2 bg-base-200 dark:bg-base-700 rounded-full overflow-hidden">
+                                                        <div class="h-full bg-gradient-to-r from-green-500 to-green-400" style="width: 85%"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="health-metric">
+                                                    <div class="flex justify-between items-center mb-1">
+                                                        <span class="text-sm font-medium">CPU</span>
+                                                        <span class="text-xs font-bold text-amber-600 dark:text-amber-400">62%</span>
+                                                    </div>
+                                                    <div class="h-2 bg-base-200 dark:bg-base-700 rounded-full overflow-hidden">
+                                                        <div class="h-full bg-gradient-to-r from-amber-500 to-amber-400" style="width: 62%"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="health-metric">
+                                                    <div class="flex justify-between items-center mb-1">
+                                                        <span class="text-sm font-medium">Memory</span>
+                                                        <span class="text-xs font-bold text-blue-600 dark:text-blue-400">45%</span>
+                                                    </div>
+                                                    <div class="h-2 bg-base-200 dark:bg-base-700 rounded-full overflow-hidden">
+                                                        <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400" style="width: 45%"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="health-metric">
+                                                    <div class="flex justify-between items-center mb-1">
+                                                        <span class="text-sm font-medium">Disk</span>
+                                                        <span class="text-xs font-bold text-red-600 dark:text-red-400">92%</span>
+                                                    </div>
+                                                    <div class="h-2 bg-base-200 dark:bg-base-700 rounded-full overflow-hidden">
+                                                        <div class="h-full bg-gradient-to-r from-red-500 to-red-400" style="width: 92%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-4">
+                                                <h4 class="text-sm font-semibold text-base-700 dark:text-base-300 mb-3 flex items-center gap-2">
+                                                    <i class="fa-solid fa-clock-rotate-left text-blue-500 dark:text-blue-400"></i> 
+                                                    Recent Activity
+                                                </h4>
+                                                <div class="space-y-3 max-h-44 overflow-y-auto pr-1 activity-timeline">
+                                                    <div class="flex items-start gap-3">
+                                                        <div class="timeline-marker"></div>
+                                                        <div>
+                                                            <p class="text-xs font-medium">Database backup completed</p>
+                                                            <p class="text-xs text-base-500 dark:text-base-400">Just now</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start gap-3">
+                                                        <div class="timeline-marker bg-amber-400"></div>
+                                                        <div>
+                                                            <p class="text-xs font-medium">Connection pool rebalanced</p>
+                                                            <p class="text-xs text-base-500 dark:text-base-400">10 minutes ago</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start gap-3">
+                                                        <div class="timeline-marker bg-green-400"></div>
+                                                        <div>
+                                                            <p class="text-xs font-medium">Vacuum process completed</p>
+                                                            <p class="text-xs text-base-500 dark:text-base-400">25 minutes ago</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-start gap-3">
+                                                        <div class="timeline-marker bg-red-400"></div>
+                                                        <div>
+                                                            <p class="text-xs font-medium">High CPU usage detected</p>
+                                                            <p class="text-xs text-base-500 dark:text-base-400">55 minutes ago</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div id="solution-of-the-week" class="mb-6"></div>
                                         <div id="most-viewed-container"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- New Activity Log Section -->
+                                <div class="mt-8 bg-white dark:bg-base-800 p-6 rounded-lg shadow-lg border border-base-200 dark:border-base-700">
+                                    <div class="flex justify-between items-center mb-6">
+                                        <h3 class="text-lg font-semibold text-base-800 dark:text-white">Recent Activity Log</h3>
+                                        <button class="text-xs flex items-center gap-1 px-2 py-1 bg-base-100 dark:bg-base-700 border border-base-300 dark:border-base-600 rounded hover:bg-base-200 dark:hover:bg-base-600">
+                                            <span>View All</span>
+                                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                                        </button>
+                                    </div>
+                                    <div class="activity-timeline relative">
+                                        <div class="activity-line absolute left-[19px] top-1 bottom-8 w-[2px] bg-base-200 dark:bg-base-700"></div>
+                                        
+                                        <div class="activity-item flex gap-4 mb-5 relative">
+                                            <div class="activity-marker w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 z-10">
+                                                <i class="fa-solid fa-user-plus text-blue-600 dark:text-blue-400"></i>
+                                            </div>
+                                            <div>
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <h4 class="font-medium text-base-800 dark:text-base-100">New User Registered</h4>
+                                                    <span class="text-xs text-base-500 dark:text-base-400">10 minutes ago</span>
+                                                </div>
+                                                <p class="text-sm text-base-600 dark:text-base-300">User 'postgres_admin42' registered and accessed performance tuning docs.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="activity-item flex gap-4 mb-5 relative">
+                                            <div class="activity-marker w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0 z-10">
+                                                <i class="fa-solid fa-file-circle-check text-green-600 dark:text-green-400"></i>
+                                            </div>
+                                            <div>
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <h4 class="font-medium text-base-800 dark:text-base-100">Guide Updated</h4>
+                                                    <span class="text-xs text-base-500 dark:text-base-400">42 minutes ago</span>
+                                                </div>
+                                                <p class="text-sm text-base-600 dark:text-base-300">Performance tuning documentation was updated with new tips for PostgreSQL 15.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="activity-item flex gap-4 mb-5 relative">
+                                            <div class="activity-marker w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0 z-10">
+                                                <i class="fa-solid fa-triangle-exclamation text-amber-600 dark:text-amber-400"></i>
+                                            </div>
+                                            <div>
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <h4 class="font-medium text-base-800 dark:text-base-100">New Issue Reported</h4>
+                                                    <span class="text-xs text-base-500 dark:text-base-400">1 hour ago</span>
+                                                </div>
+                                                <p class="text-sm text-base-600 dark:text-base-300">Connection pooling timeout issue reported for pgBouncer configuration.</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -8706,6 +9426,11 @@ PUBLICATION my_pub;</code></pre>
                         renderSolutionOfTheWeek();
                         renderCategoryOverview();
                         renderAnalytics();
+                        
+                        // Initialize enhanced dashboard features
+                        initAnimatedBackground();
+                        initDashboardInteractivity();
+                        simulateRealTimeData();
                     }, 10);
                 }
 
@@ -8839,35 +9564,95 @@ PUBLICATION my_pub;</code></pre>
                         if (cat.issues) cat.issues.forEach(issue => severities[issue.severity]++);
                     });
                     container.className = "grid grid-cols-1 lg:grid-cols-3 gap-6";
-                    container.innerHTML = `<div class="stat-card bg-white dark:bg-base-800 p-6 rounded-xl shadow-lg border border-base-200 dark:border-base-700 flex items-center space-x-4 hover:shadow-xl transition-all duration-300" style="--delay: 0s">
-                            <div class="p-4 rounded-full bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white shadow-lg"><i class="fa-solid fa-list-check text-3xl"></i></div>
-                            <div><p class="text-sm font-medium text-base-600 dark:text-base-400">Total Issues</p><p class="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent dark:from-primary-400 dark:to-primary-200">${totalIssues}</p></div>
+                    container.innerHTML = `
+                        <div class="stat-card bg-white dark:bg-base-800 p-6 rounded-xl shadow-lg border border-base-200 dark:border-base-700 flex items-center gap-5 hover:shadow-xl transition-all duration-300" style="--delay: 0s">
+                            <div class="stat-icon-container relative">
+                                <div class="absolute -inset-0.5 rounded-lg bg-gradient-to-r from-primary-500 to-primary-700 opacity-30 blur-sm"></div>
+                                <div class="p-4 rounded-xl bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 text-white shadow-lg relative">
+                                    <i class="fa-solid fa-rectangle-list text-3xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-sm font-medium text-base-600 dark:text-base-400">Total Issues</p>
+                                    <span class="text-xs bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 px-2 py-0.5 rounded-full font-medium">+${Math.floor(Math.random() * 10) + 2} today</span>
+                                </div>
+                                <div class="flex items-end gap-1.5">
+                                    <p class="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent dark:from-primary-400 dark:to-primary-200">${totalIssues}</p>
+                                    <p class="text-sm font-medium text-primary-600 dark:text-primary-400 mb-1.5">issues</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-card bg-white dark:bg-base-800 p-6 rounded-xl shadow-lg border border-base-200 dark:border-base-700 flex items-center space-x-4 hover:shadow-xl transition-all duration-300" style="--delay: 0.1s">
-                            <div class="p-4 rounded-full bg-gradient-to-br from-success-500 via-success-600 to-success-700 text-white shadow-lg"><i class="fa-solid fa-folder-tree text-3xl"></i></div>
-                            <div><p class="text-sm font-medium text-base-600 dark:text-base-400">Categories</p><p class="text-3xl font-bold bg-gradient-to-r from-success-600 to-success-800 bg-clip-text text-transparent dark:from-success-400 dark:to-success-200">${totalCategories}</p></div>
+                        <div class="stat-card bg-white dark:bg-base-800 p-6 rounded-xl shadow-lg border border-base-200 dark:border-base-700 flex items-center gap-5 hover:shadow-xl transition-all duration-300" style="--delay: 0.1s">
+                            <div class="stat-icon-container relative">
+                                <div class="absolute -inset-0.5 rounded-lg bg-gradient-to-r from-success-500 to-success-700 opacity-30 blur-sm"></div>
+                                <div class="p-4 rounded-xl bg-gradient-to-br from-success-500 via-success-600 to-success-700 text-white shadow-lg relative">
+                                    <i class="fa-solid fa-folder-tree text-3xl"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-sm font-medium text-base-600 dark:text-base-400">Categories</p>
+                                </div>
+                                <div class="flex items-end gap-1.5">
+                                    <p class="text-3xl font-bold bg-gradient-to-r from-success-600 to-success-800 bg-clip-text text-transparent dark:from-success-400 dark:to-success-200">${totalCategories}</p>
+                                    <p class="text-sm font-medium text-success-600 dark:text-success-400 mb-1.5">error groups</p>
+                                </div>
+                                <div class="text-xs text-base-500 dark:text-base-400 mt-1">
+                                    Coverage complete
+                                </div>
+                            </div>
                         </div>
                         <div class="stat-card bg-white dark:bg-base-800 p-6 rounded-xl shadow-lg border border-base-200 dark:border-base-700 hover:shadow-xl transition-all duration-300" style="--delay: 0.2s">
-                            <h3 class="text-lg font-semibold text-base-800 dark:text-white mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-chart-pie text-primary-600 dark:text-primary-400"></i>
-                                Errors by Severity
-                            </h3>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-base-800 dark:text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-pie text-primary-600 dark:text-primary-400"></i>
+                                    Errors by Severity
+                                </h3>
+                                <div class="stat-refresh-btn w-6 h-6 rounded-full bg-base-100 dark:bg-base-700 flex items-center justify-center cursor-pointer hover:bg-base-200 dark:hover:bg-base-600 transition-colors">
+                                    <i class="fa-solid fa-arrows-rotate text-xs text-base-500 dark:text-base-400"></i>
+                                </div>
+                            </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-danger-50 to-danger-100 dark:from-danger-900/20 dark:to-danger-800/20 border border-danger-200 dark:border-danger-700/50">
                                     <div class="p-2 rounded-lg bg-danger-500 text-white shadow-md"><i class="fa-solid fa-exclamation-triangle text-lg"></i></div>
-                                    <div><p class="text-sm font-medium text-danger-700 dark:text-danger-300">Critical</p><p class="font-bold text-xl text-danger-800 dark:text-danger-200">${severities.Critical}</p></div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-baseline">
+                                            <p class="text-sm font-medium text-danger-700 dark:text-danger-300">Critical</p>
+                                            <span class="text-xs text-danger-600 dark:text-danger-400 font-medium">+${Math.floor(Math.random() * 3) + 1}</span>
+                                        </div>
+                                        <p class="font-bold text-xl text-danger-800 dark:text-danger-200">${severities.Critical}</p>
+                                    </div>
                                 </div>
                                 <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-warning-50 to-warning-100 dark:from-warning-900/20 dark:to-warning-800/20 border border-warning-200 dark:border-warning-700/50">
                                     <div class="p-2 rounded-lg bg-warning-500 text-white shadow-md"><i class="fa-solid fa-exclamation-circle text-lg"></i></div>
-                                    <div><p class="text-sm font-medium text-warning-700 dark:text-warning-300">High</p><p class="font-bold text-xl text-warning-800 dark:text-warning-200">${severities.High}</p></div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-baseline">
+                                            <p class="text-sm font-medium text-warning-700 dark:text-warning-300">High</p>
+                                            <span class="text-xs text-warning-600 dark:text-warning-400 font-medium">+${Math.floor(Math.random() * 5) + 3}</span>
+                                        </div>
+                                        <p class="font-bold text-xl text-warning-800 dark:text-warning-200">${severities.High}</p>
+                                    </div>
                                 </div>
                                 <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 border border-primary-200 dark:border-primary-700/50">
                                     <div class="p-2 rounded-lg bg-primary-500 text-white shadow-md"><i class="fa-solid fa-info-circle text-lg"></i></div>
-                                    <div><p class="text-sm font-medium text-primary-700 dark:text-primary-300">Medium</p><p class="font-bold text-xl text-primary-800 dark:text-primary-200">${severities.Medium}</p></div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-baseline">
+                                            <p class="text-sm font-medium text-primary-700 dark:text-primary-300">Medium</p>
+                                            <span class="text-xs text-primary-600 dark:text-primary-400 font-medium">+${Math.floor(Math.random() * 10) + 7}</span>
+                                        </div>
+                                        <p class="font-bold text-xl text-primary-800 dark:text-primary-200">${severities.Medium}</p>
+                                    </div>
                                 </div>
                                 <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-success-50 to-success-100 dark:from-success-900/20 dark:to-success-800/20 border border-success-200 dark:border-success-700/50">
                                     <div class="p-2 rounded-lg bg-success-500 text-white shadow-md"><i class="fa-solid fa-check-circle text-lg"></i></div>
-                                    <div><p class="text-sm font-medium text-success-700 dark:text-success-300">Low</p><p class="font-bold text-xl text-success-800 dark:text-success-200">${severities.Low}</p></div>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-baseline">
+                                            <p class="text-sm font-medium text-success-700 dark:text-success-300">Low</p>
+                                            <span class="text-xs text-success-600 dark:text-success-400 font-medium">+${Math.floor(Math.random() * 15) + 10}</span>
+                                        </div>
+                                        <p class="font-bold text-xl text-success-800 dark:text-success-200">${severities.Low}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>`;
@@ -8897,105 +9682,357 @@ PUBLICATION my_pub;</code></pre>
                             }
                         }
 
-                    const categories = Object.keys(knowledgeBaseData).filter(k => knowledgeBaseData[k]?.issues);
-                    if (categories.length === 0) {
-                        console.warn('No categories with issues found for chart');
-                        return;
-                    }
-                    
-                    const data = categories.map(k => knowledgeBaseData[k].issues?.length || 0);
-                    const labels = categories.map(k => knowledgeBaseData[k]?.title || 'Unknown');
-                    const totalIssues = data.reduce((a, b) => a + b, 0);
-                    
-                    if (totalIssues === 0) {
-                        console.warn('No issues found for chart');
-                        return;
-                    }
-                    
-                    const isDarkMode = document.documentElement.classList.contains('dark');
-                    const textColor = isDarkMode ? '#f1f5f9' : '#334155';
-                    
-                    // Define theme-specific color palettes - use highly contrasting colors for dark mode
-                    const lightModeColors = [
-                        '#0284c7', '#0ea5e9', '#38bdf8', '#7dd3fc', '#bae6fd',  // Blues
-                        '#3b82f6', '#60a5fa', '#93c5fd',                         // Indigos
-                        '#8b5cf6', '#a78bfa', '#c4b5fd',                         // Purples
-                        '#06b6d4', '#22d3ee', '#67e8f9',                         // Cyans
-                        '#10b981', '#34d399', '#6ee7b7',                         // Emeralds
-                        '#059669', '#10b981', '#34d399'                          // Greens
-                    ];
-                    
-                    const darkModeColors = [
-                        '#38bdf8', '#60a5fa', '#93c5fd', '#3b82f6', '#2563eb',   // Blues/Indigos (brighter)
-                        '#c084fc', '#a855f7', '#d8b4fe', '#e9d5ff', '#8b5cf6',   // Purples (brighter)
-                        '#67e8f9', '#22d3ee', '#0ea5e9', '#0284c7', '#0369a1',   // Cyans/Blues (brighter)
-                        '#4ade80', '#34d399', '#10b981', '#059669', '#047857',   // Greens (brighter)
-                        '#fb923c', '#f97316', '#ea580c', '#facc15', '#eab308'    // Oranges/Yellows (warm contrasting)
-                    ];
-                    
-                    // Choose palette based on current theme
-                    const colorPalette = isDarkMode ? darkModeColors : lightModeColors;
-                    
-                    // Ensure we have enough colors by repeating the palette if needed
-                    const chartColors = [];
-                    for (let i = 0; i < data.length; i++) {
-                        chartColors.push(colorPalette[i % colorPalette.length]);
-                    }
+                        const chartViewSelector = document.getElementById('chart-view-selector');
+                        const chartView = chartViewSelector?.value || 'category';
+                        
+                        const isDarkMode = document.documentElement.classList.contains('dark');
+                        const textColor = isDarkMode ? '#f1f5f9' : '#334155';
+                        const gridColor = isDarkMode ? 'rgba(241, 245, 249, 0.1)' : 'rgba(51, 65, 85, 0.1)';
 
-                    const centerTextPlugin = {
-                        id: 'centerText',
-                        beforeDraw: (chart) => {
-                            try {
-                                const { ctx, chartArea: { width, height } } = chart;
-                                ctx.save();
-                                ctx.font = `bold 2.5rem ${getComputedStyle(document.body).fontFamily}`;
-                                ctx.textAlign = 'center';
-                                ctx.textBaseline = 'middle';
-                                ctx.fillStyle = textColor;
-                                ctx.fillText(totalIssues, width / 2, height / 2 - 10);
-                                ctx.font = `500 1rem ${getComputedStyle(document.body).fontFamily}`;
-                                ctx.fillText('Total Issues', width / 2, height / 2 + 20);
-                                ctx.restore();
-                            } catch (textError) {
-                                console.warn('Error rendering center text:', textError);
-                            }
-                        }
-                    };
-
-                    chartInstance = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: '# of Issues',
-                                data: data,
-                                backgroundColor: chartColors,
-                                borderColor: isDarkMode ? '#1e293b' : '#fff',
-                                borderWidth: 4,
-                                hoverOffset: 15,
-                                hoverBorderColor: isDarkMode ? '#334155' : '#e2e8f0'
-                            }]
-                        },
-                        options: {
+                        // Define theme-specific color palettes - use highly contrasting colors for dark mode
+                        const lightModeColors = [
+                            '#0284c7', '#0ea5e9', '#38bdf8', '#7dd3fc', '#bae6fd',  // Blues
+                            '#3b82f6', '#60a5fa', '#93c5fd',                         // Indigos
+                            '#8b5cf6', '#a78bfa', '#c4b5fd',                         // Purples
+                            '#06b6d4', '#22d3ee', '#67e8f9',                         // Cyans
+                            '#10b981', '#34d399', '#6ee7b7',                         // Emeralds
+                            '#059669', '#10b981', '#34d399'                          // Greens
+                        ];
+                        
+                        const darkModeColors = [
+                            '#38bdf8', '#60a5fa', '#93c5fd', '#3b82f6', '#2563eb',   // Blues/Indigos (brighter)
+                            '#c084fc', '#a855f7', '#d8b4fe', '#e9d5ff', '#8b5cf6',   // Purples (brighter)
+                            '#67e8f9', '#22d3ee', '#0ea5e9', '#0284c7', '#0369a1',   // Cyans/Blues (brighter)
+                            '#4ade80', '#34d399', '#10b981', '#059669', '#047857',   // Greens (brighter)
+                            '#fb923c', '#f97316', '#ea580c', '#facc15', '#eab308'    // Oranges/Yellows (warm contrasting)
+                        ];
+                        
+                        // Choose palette based on current theme
+                        const colorPalette = isDarkMode ? darkModeColors : lightModeColors;
+                        
+                        // Common options for all chart types
+                        const commonOptions = {
                             responsive: true,
                             maintainAspectRatio: false,
-                            cutout: '70%',
                             plugins: {
-                                legend: { position: 'right', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, color: textColor, font: { size: 14 } } },
-                                tooltip: { callbacks: { label: (c) => `${c.label || ''}: ${c.raw || 0} issues (${totalIssues > 0 ? ((c.raw / totalIssues) * 100).toFixed(2) + '%' : '0.00%'})` } }
-                            },
-                            onClick: (evt, elements) => {
-                                if (elements.length > 0) {
-                                    const categoryKey = categories[elements[0].index];
-                                    if (categoryKey) renderPage(categoryKey);
+                                tooltip: {
+                                    backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                                    titleColor: isDarkMode ? '#f1f5f9' : '#334155',
+                                    bodyColor: isDarkMode ? '#e2e8f0' : '#475569',
+                                    borderColor: isDarkMode ? 'rgba(51, 65, 85, 0.3)' : 'rgba(226, 232, 240, 0.8)',
+                                    borderWidth: 1,
+                                    padding: 12,
+                                    cornerRadius: 8,
+                                    boxPadding: 6,
+                                    usePointStyle: true
+                                },
+                                legend: { 
+                                    labels: { 
+                                        color: textColor,
+                                        font: { size: 12, weight: 'normal' },
+                                        useBorderRadius: true,
+                                        borderRadius: 4
+                                    }
                                 }
+                            },
+                            animation: {
+                                duration: 1000,
+                                easing: 'easeOutQuart'
                             }
-                        },
-                        plugins: [centerTextPlugin]
-                    });
-                } catch (error) {
-                    console.error('Error rendering dashboard chart:', error);
-                }
+                        };
+                        
+                        // Generate different chart types based on the selector
+                        if (chartView === 'category') {
+                            // Original category chart (enhanced doughnut)
+                            const categories = Object.keys(knowledgeBaseData).filter(k => knowledgeBaseData[k]?.issues);
+                            if (categories.length === 0) {
+                                console.warn('No categories with issues found for chart');
+                                return;
+                            }
+                            
+                            const data = categories.map(k => knowledgeBaseData[k].issues?.length || 0);
+                            const labels = categories.map(k => knowledgeBaseData[k]?.title || 'Unknown');
+                            const totalIssues = data.reduce((a, b) => a + b, 0);
+                            
+                            if (totalIssues === 0) {
+                                console.warn('No issues found for chart');
+                                return;
+                            }
+
+                            // Ensure we have enough colors by repeating the palette if needed
+                            const chartColors = [];
+                            for (let i = 0; i < data.length; i++) {
+                                chartColors.push(colorPalette[i % colorPalette.length]);
+                            }
+
+                            const centerTextPlugin = {
+                                id: 'centerText',
+                                beforeDraw: (chart) => {
+                                    try {
+                                        const { ctx, chartArea: { width, height } } = chart;
+                                        ctx.save();
+                                        ctx.font = `bold 2.5rem ${getComputedStyle(document.body).fontFamily}`;
+                                        ctx.textAlign = 'center';
+                                        ctx.textBaseline = 'middle';
+                                        ctx.fillStyle = textColor;
+                                        ctx.fillText(totalIssues, width / 2, height / 2 - 10);
+                                        ctx.font = `500 1rem ${getComputedStyle(document.body).fontFamily}`;
+                                        ctx.fillText('Total Issues', width / 2, height / 2 + 20);
+                                        ctx.restore();
+                                    } catch (textError) {
+                                        console.warn('Error rendering center text:', textError);
+                                    }
+                                }
+                            };
+
+                            chartInstance = new Chart(ctx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: '# of Issues',
+                                        data: data,
+                                        backgroundColor: chartColors,
+                                        borderColor: isDarkMode ? '#1e293b' : '#fff',
+                                        borderWidth: 4,
+                                        hoverOffset: 15,
+                                        hoverBorderColor: isDarkMode ? '#334155' : '#e2e8f0',
+                                        borderRadius: 4
+                                    }]
+                                },
+                                options: {
+                                    ...commonOptions,
+                                    cutout: '70%',
+                                    plugins: {
+                                        ...commonOptions.plugins,
+                                        legend: { 
+                                            position: 'right', 
+                                            labels: { 
+                                                usePointStyle: true, 
+                                                pointStyle: 'circle', 
+                                                padding: 20, 
+                                                color: textColor, 
+                                                font: { size: 12 } 
+                                            } 
+                                        },
+                                        tooltip: { 
+                                            ...commonOptions.plugins.tooltip,
+                                            callbacks: { 
+                                                label: (c) => `${c.label || ''}: ${c.raw || 0} issues (${totalIssues > 0 ? ((c.raw / totalIssues) * 100).toFixed(2) + '%' : '0.00%'})` 
+                                            } 
+                                        }
+                                    },
+                                    onClick: (evt, elements) => {
+                                        if (elements.length > 0) {
+                                            const categoryKey = categories[elements[0].index];
+                                            if (categoryKey) renderPage(categoryKey);
+                                        }
+                                    }
+                                },
+                                plugins: [centerTextPlugin]
+                            });
+                        } else if (chartView === 'severity') {
+                            // Severity chart (horizontal bar)
+                            const severities = ['Critical', 'High', 'Medium', 'Low'];
+                            const severityCounts = { Critical: 0, High: 0, Medium: 0, Low: 0 };
+                            
+                            Object.values(knowledgeBaseData).forEach(cat => {
+                                if (cat.issues) cat.issues.forEach(issue => {
+                                    if (severityCounts[issue.severity] !== undefined) {
+                                        severityCounts[issue.severity]++;
+                                    }
+                                });
+                            });
+                            
+                            const data = severities.map(s => severityCounts[s]);
+                            const totalIssues = data.reduce((a, b) => a + b, 0);
+                            
+                            if (totalIssues === 0) {
+                                console.warn('No severity data found for chart');
+                                return;
+                            }
+                            
+                            const severityColors = {
+                                Critical: isDarkMode ? '#fca5a5' : '#dc2626',
+                                High: isDarkMode ? '#fdba74' : '#ea580c',
+                                Medium: isDarkMode ? '#fde68a' : '#d97706',
+                                Low: isDarkMode ? '#86efac' : '#16a34a'
+                            };
+                            
+                            chartInstance = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: severities,
+                                    datasets: [{
+                                        label: 'Issues',
+                                        data: data,
+                                        backgroundColor: severities.map(s => severityColors[s]),
+                                        borderRadius: 6,
+                                        borderWidth: 0,
+                                        maxBarThickness: 30
+                                    }]
+                                },
+                                options: {
+                                    ...commonOptions,
+                                    indexAxis: 'y',
+                                    plugins: {
+                                        ...commonOptions.plugins,
+                                        legend: { display: false },
+                                        tooltip: {
+                                            ...commonOptions.plugins.tooltip,
+                                            callbacks: {
+                                                label: (c) => `${c.raw} issues (${totalIssues > 0 ? ((c.raw / totalIssues) * 100).toFixed(2) + '%' : '0.00%'})`
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            grid: {
+                                                color: gridColor
+                                            },
+                                            ticks: {
+                                                color: textColor,
+                                                font: {
+                                                    size: 12
+                                                }
+                                            }
+                                        },
+                                        y: {
+                                            grid: {
+                                                display: false
+                                            },
+                                            ticks: {
+                                                color: textColor,
+                                                font: {
+                                                    size: 12,
+                                                    weight: 'bold'
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        } else if (chartView === 'monthly') {
+                            // Monthly trend (line chart)
+                            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
+                            
+                            // Simulate monthly data
+                            const criticalData = [4, 6, 8, 7, 10, 12, 9, 11];
+                            const highData = [12, 15, 18, 14, 17, 22, 19, 24];
+                            const mediumData = [25, 22, 28, 32, 30, 27, 35, 38];
+                            const lowData = [40, 38, 35, 42, 45, 48, 43, 47];
+                            
+                            const datasets = [
+                                {
+                                    label: 'Critical',
+                                    data: criticalData,
+                                    borderColor: isDarkMode ? '#fca5a5' : '#dc2626',
+                                    backgroundColor: isDarkMode ? 'rgba(252, 165, 165, 0.2)' : 'rgba(220, 38, 38, 0.1)',
+                                    fill: true,
+                                    tension: 0.4,
+                                    borderWidth: 2,
+                                    pointRadius: 3,
+                                    pointBackgroundColor: isDarkMode ? '#fca5a5' : '#dc2626'
+                                },
+                                {
+                                    label: 'High',
+                                    data: highData,
+                                    borderColor: isDarkMode ? '#fdba74' : '#ea580c',
+                                    backgroundColor: isDarkMode ? 'rgba(253, 186, 116, 0.2)' : 'rgba(234, 88, 12, 0.1)',
+                                    fill: true,
+                                    tension: 0.4,
+                                    borderWidth: 2,
+                                    pointRadius: 3,
+                                    pointBackgroundColor: isDarkMode ? '#fdba74' : '#ea580c'
+                                },
+                                {
+                                    label: 'Medium',
+                                    data: mediumData,
+                                    borderColor: isDarkMode ? '#fde68a' : '#d97706',
+                                    backgroundColor: isDarkMode ? 'rgba(253, 230, 138, 0.2)' : 'rgba(217, 119, 6, 0.1)',
+                                    fill: true,
+                                    tension: 0.4,
+                                    borderWidth: 2,
+                                    pointRadius: 3,
+                                    pointBackgroundColor: isDarkMode ? '#fde68a' : '#d97706'
+                                },
+                                {
+                                    label: 'Low',
+                                    data: lowData,
+                                    borderColor: isDarkMode ? '#86efac' : '#16a34a',
+                                    backgroundColor: isDarkMode ? 'rgba(134, 239, 172, 0.2)' : 'rgba(22, 163, 74, 0.1)',
+                                    fill: true,
+                                    tension: 0.4,
+                                    borderWidth: 2,
+                                    pointRadius: 3,
+                                    pointBackgroundColor: isDarkMode ? '#86efac' : '#16a34a'
+                                }
+                            ];
+                            
+                            chartInstance = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: months,
+                                    datasets: datasets
+                                },
+                                options: {
+                                    ...commonOptions,
+                                    plugins: {
+                                        ...commonOptions.plugins,
+                                        tooltip: {
+                                            ...commonOptions.plugins.tooltip,
+                                            mode: 'index',
+                                            intersect: false
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            grid: {
+                                                color: gridColor
+                                            },
+                                            ticks: {
+                                                color: textColor
+                                            }
+                                        },
+                                        y: {
+                                            grid: {
+                                                color: gridColor
+                                            },
+                                            ticks: {
+                                                color: textColor,
+                                                precision: 0
+                                            },
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        
+                        // Register change event for chart view selector
+                        if (chartViewSelector && !chartViewSelector.hasEventListener) {
+                            chartViewSelector.addEventListener('change', renderDashboardChart);
+                            chartViewSelector.hasEventListener = true;
+                        }
+                        
+                        // Register download button
+                        const downloadBtn = document.getElementById('chart-download-btn');
+                        if (downloadBtn && !downloadBtn.hasEventListener) {
+                            downloadBtn.addEventListener('click', () => {
+                                try {
+                                    const link = document.createElement('a');
+                                    link.download = `postgres-kb-chart-${chartView}-${new Date().toISOString().slice(0,10)}.png`;
+                                    link.href = canvas.toDataURL('image/png');
+                                    link.click();
+                                } catch (err) {
+                                    console.error('Error exporting chart:', err);
+                                }
+                            });
+                            downloadBtn.hasEventListener = true;
+                        }
+                    } catch (error) {
+                        console.error('Error rendering dashboard chart:', error);
+                    }
                 }
                 
                 function attachAllListeners() {
@@ -10674,6 +11711,215 @@ PUBLICATION my_pub;</code></pre>
                 
                 // Initialize touch scrolling for mobile devices after content is loaded
                 setTimeout(initializeTouchScrolling, 1500);
+                
+                // Dashboard Enhancement Functions
+                function initAnimatedBackground() {
+                    const animatedBg = document.getElementById('animated-bg');
+                    if (!animatedBg) return;
+                    
+                    // Generate animated particles
+                    for (let i = 0; i < 50; i++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        
+                        // Random positioning and styling
+                        particle.style.top = `${Math.random() * 100}%`;
+                        particle.style.left = `${Math.random() * 100}%`;
+                        particle.style.width = `${Math.random() * 5 + 2}px`;
+                        particle.style.height = particle.style.width;
+                        particle.style.opacity = Math.random() * 0.5 + 0.1;
+                        
+                        // Animation duration and delay
+                        particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                        particle.style.animationDelay = `${Math.random() * 5}s`;
+                        
+                        animatedBg.appendChild(particle);
+                    }
+                }
+
+                function initDashboardInteractivity() {
+                    // Quick action buttons hover effect
+                    const quickActionBtns = document.querySelectorAll('.quick-action-btn');
+                    quickActionBtns.forEach(btn => {
+                        btn.addEventListener('mouseenter', function() {
+                            const hoverEffect = this.querySelector('.btn-hover-effect');
+                            if (hoverEffect) {
+                                hoverEffect.style.transform = 'scale(1.5)';
+                                hoverEffect.style.opacity = '0.4';
+                            }
+                        });
+                        
+                        btn.addEventListener('mouseleave', function() {
+                            const hoverEffect = this.querySelector('.btn-hover-effect');
+                            if (hoverEffect) {
+                                hoverEffect.style.transform = 'scale(1)';
+                                hoverEffect.style.opacity = '0';
+                            }
+                        });
+                    });
+                    
+                    // Chart download functionality enhancement
+                    const chartDownloadBtn = document.getElementById('chart-download-btn');
+                    if (chartDownloadBtn) {
+                        chartDownloadBtn.addEventListener('click', function() {
+                            const chart = document.getElementById('overviewChart');
+                            if (!chart) return;
+                            
+                            // Create visual feedback for download
+                            this.innerHTML = '<i class="fa-solid fa-check text-xs"></i><span>Saved</span>';
+                            this.classList.add('bg-green-100', 'dark:bg-green-800', 'text-green-800', 'dark:text-green-200');
+                            
+                            setTimeout(() => {
+                                this.innerHTML = '<i class="fa-solid fa-download text-xs"></i><span>Export</span>';
+                                this.classList.remove('bg-green-100', 'dark:bg-green-800', 'text-green-800', 'dark:text-green-200');
+                            }, 2000);
+                        });
+                    }
+                    
+                    // Initialize active users counter animation
+                    initActiveUsersCounter();
+                }
+
+                function initActiveUsersCounter() {
+                    const activeUsersElement = document.getElementById('active-users');
+                    if (!activeUsersElement) return;
+                    
+                    let count = 230;
+                    const maxCount = 260;
+                    const minCount = 220;
+                    
+                    // Update the count periodically to simulate real-time users
+                    setInterval(() => {
+                        // Random fluctuation in user count
+                        const change = Math.floor(Math.random() * 5) - 2;
+                        count += change;
+                        
+                        // Keep within bounds
+                        if (count > maxCount) count = maxCount;
+                        if (count < minCount) count = minCount;
+                        
+                        // Update display with a subtle animation
+                        activeUsersElement.innerHTML = `<i class="fa-solid fa-user-group text-xs mr-1"></i> ${count} users online`;
+                        activeUsersElement.classList.add('pulse-animation');
+                        
+                        setTimeout(() => {
+                            activeUsersElement.classList.remove('pulse-animation');
+                        }, 500);
+                    }, 5000);
+                }
+
+                function simulateRealTimeData() {
+                    // Simulate real-time updates to system health metrics
+                    const healthMetrics = document.querySelectorAll('.health-metric');
+                    
+                    if (healthMetrics.length === 0) return;
+                    
+                    // Update metrics every few seconds to simulate live data
+                    setInterval(() => {
+                        healthMetrics.forEach(metric => {
+                            // Get current value from width style
+                            const progressBar = metric.querySelector('div > div');
+                            if (!progressBar) return;
+                            
+                            const currentWidth = parseInt(progressBar.style.width) || 0;
+                            
+                            // Random change within bounds
+                            let newWidth = currentWidth + (Math.random() * 10 - 5);
+                            if (newWidth < 10) newWidth = 10;
+                            if (newWidth > 98) newWidth = 98;
+                            
+                            // Update progress bar
+                            progressBar.style.width = `${newWidth}%`;
+                            
+                            // Update percentage text
+                            const percentText = metric.querySelector('.text-xs');
+                            if (percentText) {
+                                percentText.textContent = `${Math.round(newWidth)}%`;
+                                
+                                // Update color based on threshold
+                                const parent = percentText.parentElement.parentElement;
+                                const metricName = parent.querySelector('.text-sm').textContent;
+                                
+                                if (newWidth >= 90) {
+                                    percentText.className = 'text-xs font-bold text-red-600 dark:text-red-400';
+                                    
+                                    if (metricName === 'Disk' && newWidth >= 92) {
+                                        createAlertNotification('Critical disk usage detected!', 'warning');
+                                    }
+                                } else if (newWidth >= 75) {
+                                    percentText.className = 'text-xs font-bold text-amber-600 dark:text-amber-400';
+                                } else if (newWidth >= 50) {
+                                    percentText.className = 'text-xs font-bold text-yellow-600 dark:text-yellow-400';
+                                } else {
+                                    percentText.className = 'text-xs font-bold text-green-600 dark:text-green-400';
+                                }
+                            }
+                        });
+                    }, 7000);
+                }
+
+                function createAlertNotification(message, type = 'info') {
+                    // Create notification container if it doesn't exist
+                    let container = document.getElementById('notification-container');
+                    if (!container) {
+                        container = document.createElement('div');
+                        container.id = 'notification-container';
+                        container.className = 'fixed bottom-4 right-4 z-50 flex flex-col gap-3';
+                        document.body.appendChild(container);
+                    }
+                    
+                    // Create notification element
+                    const notification = document.createElement('div');
+                    notification.className = 'notification flex items-center gap-3 bg-white dark:bg-base-800 p-3 rounded-lg shadow-lg border border-base-200 dark:border-base-700 transform translate-x-full transition-transform duration-300';
+                    
+                    // Set icon based on type
+                    let iconClass = 'fa-info-circle text-blue-500';
+                    if (type === 'warning') iconClass = 'fa-exclamation-triangle text-amber-500';
+                    if (type === 'error') iconClass = 'fa-exclamation-circle text-red-500';
+                    if (type === 'success') iconClass = 'fa-check-circle text-green-500';
+                    
+                    notification.innerHTML = `
+                        <div class="notification-icon">
+                            <i class="fa-solid ${iconClass} text-lg"></i>
+                        </div>
+                        <div class="notification-content">
+                            <p class="text-sm font-medium text-base-800 dark:text-base-200">${message}</p>
+                        </div>
+                        <button class="notification-close ml-2 text-base-400 hover:text-base-600 dark:hover:text-base-300">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    `;
+                    
+                    // Add to container
+                    container.appendChild(notification);
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        notification.classList.remove('translate-x-full');
+                    }, 10);
+                    
+                    // Add close button functionality
+                    const closeBtn = notification.querySelector('.notification-close');
+                    closeBtn.addEventListener('click', () => {
+                        notification.classList.add('translate-x-full');
+                        setTimeout(() => {
+                            notification.remove();
+                        }, 300);
+                    });
+                    
+                    // Auto-remove after delay
+                    setTimeout(() => {
+                        notification.classList.add('translate-x-full');
+                        setTimeout(() => {
+                            notification.remove();
+                        }, 300);
+                    }, 5000);
+                }
+                
+                // Make them available globally
+                window.initAnimatedBackground = initAnimatedBackground;
+                window.initDashboardInteractivity = initDashboardInteractivity;
+                window.simulateRealTimeData = simulateRealTimeData;
             });
             
             startApp();
